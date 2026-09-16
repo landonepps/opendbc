@@ -164,6 +164,9 @@ def _initialize_honda(CP: structs.CarParams, CP_SP: structs.CarParamsSP, params_
       CP_SP.flags |= HondaFlagsSP.STOCK_LONGITUDINAL.value
       CP_SP.safetyParam |= HondaSafetyFlagsSP.STOCK_LONGITUDINAL
 
+    from opendbc.car.honda.bosch_c_radar_live import configure
+    configure(CP, CP_SP, int(params_dict.get("HondaBoschCExperimentalRadar", 0)) == 1)
+
 
 def _initialize_toyota(CP: structs.CarParams, CP_SP: structs.CarParamsSP, params_dict: dict[str, str]) -> None:
   if CP.brand == 'toyota':
