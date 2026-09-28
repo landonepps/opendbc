@@ -315,3 +315,31 @@ def test_rejected_banks_become_unavailable_only_after_the_stale_limit(adapter):
   stale = adapter.update([], now_nanos=270_000_000)
   errors = stale.errors.to_dict()
   assert errors.pop('radarUnavailableTemporary') and not any(errors.values()) and not stale.points
+
+
+def test_shipped_dbc_matches_adapter_decode():
+  # opendbc/dbc/honda_bosch_c_radar.dbc is for analysis tools; the adapter decodes the same bits itself.
+  import random
+  from opendbc.can import CANParser
+  from opendbc.car.honda.bosch_c_radar import unpack
+  from opendbc.car.honda.bosch_c_radar_live import PROVISIONAL_CALIBRATION
+
+  names = dict(wire_id='OBJECT_ID_RAW', frame_counter='FRAME_COUNTER_RAW', frame_phase='FRAME_PHASE_RAW',
+               lifecycle='LIFECYCLE_RAW', x_raw='POSITION_X_RAW', x_companion_raw='X_COMPANION_RAW', y_raw='POSITION_Y_RAW',
+               y_companion_raw='Y_COMPANION_RAW', velocity_raw='VELOCITY_CANDIDATE_RAW', quality_container_raw='QUALITY_CONTAINER_RAW',
+               lateral_velocity_candidate_raw='LATERAL_VELOCITY_CANDIDATE_RAW',
+               normalized_rate_candidate_raw='NORMALIZED_RATE_CANDIDATE_RAW',
+               uncertainty_candidate_raw='REL_VELOCITY_UNCERTAINTY_CANDIDATE_RAW')
+  rng = random.Random(0)
+  parser = CANParser('honda_bosch_c_radar', [(address, 0) for address in OBJECT_IDS], 1)
+  for step in range(50):
+    payloads = {address: bytes(rng.getrandbits(8) for _ in range(64)) for address in OBJECT_IDS}
+    parser.update([(step, [(address, payload, 1) for address, payload in payloads.items()])])
+    for address, payload in payloads.items():
+      raw, dbc = unpack(address, payload), parser.vl[address]
+      assert {field: getattr(raw, field) for field in names} == {field: dbc[name] for field, name in names.items()}
+      x, y, v = PROVISIONAL_CALIBRATION.convert(raw)
+      assert (dbc['DREL'], dbc['YREL'], dbc['VREL']) == pytest.approx((x, y, v))
+      angles = int.from_bytes(payload, 'little')
+      for start, name in ((411, 'AZIMUTH_CENTER'), (424, 'AZIMUTH_EDGE_A'), (440, 'AZIMUTH_EDGE_B')):
+        assert dbc[name] == pytest.approx(((angles >> start) & 8191) / 4096 - 1)
