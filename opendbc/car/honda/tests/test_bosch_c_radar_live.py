@@ -44,7 +44,7 @@ def test_enabled_changes_only_radar_availability_and_recorded_experimental_flag(
   ri = RadarInterface(p, sp)
   ri.bosch_c.clock = lambda: 1_000_000_000
   result = ri.update([(999_000_000, bank())])
-  assert result.points and not result.errors.canError
+  assert result.points and not result.errors.radarUnavailableTemporary
 
 
 @pytest.mark.parametrize('field,value', [('carFingerprint', 'HONDA_CIVIC'), ('brand', 'toyota'),
@@ -81,10 +81,10 @@ def test_manually_inconsistent_selection_fails_closed():
 def test_stale_receive_batch_never_publishes_old_points_and_fresh_bank_recovers():
   ri, now = live()
   result = ri.update([(now[0]-300_000_000, bank())])
-  assert result.errors.canError and not result.points
+  assert result.errors.radarUnavailableTemporary and not result.points
   now[0] += 10_000_000
   result = ri.update([(now[0]-1_000_000, bank(1))])
-  assert result.points and not result.errors.canError
+  assert result.points and not result.errors.radarUnavailableTemporary
 
 
 def test_healthy_calls_do_not_advance_past_inflight_can():
@@ -93,7 +93,7 @@ def test_healthy_calls_do_not_advance_past_inflight_can():
   # New CAN can legitimately predate the previous receive wall-clock time.
   now[0] += 10_000_000
   result = ri.update([(now[0]-15_000_000, bank(1))])
-  assert result.points and not result.errors.canError
+  assert result.points and not result.errors.radarUnavailableTemporary
   assert not ri.decoder.counters['live_discarded_packets']
 
 
@@ -103,7 +103,7 @@ def test_partial_first_bank_uses_packet_clock_until_complete():
   ri.update([(now[0]-10_000_000, frames[:8])])
   now[0] += 10_000_000
   result = ri.update([(now[0]-15_000_000, frames[8:])])
-  assert result.points and not result.errors.canError
+  assert result.points and not result.errors.radarUnavailableTemporary
 
 
 def test_timeout_suspend_and_late_packet_recovery():
@@ -111,13 +111,13 @@ def test_timeout_suspend_and_late_packet_recovery():
   assert ri.update([(now[0], bank())]).points
   now[0] += 60_000_000_000
   result = ri.update([])
-  assert result.errors.canError and not result.points
+  assert result.errors.radarUnavailableTemporary and not result.points
   now[0] += 60_000_000
   result = ri.update([(now[0]-100_000_000, bank(1))])
-  assert result.errors.canError and not result.points
+  assert result.errors.radarUnavailableTemporary and not result.points
   now[0] += 10_000_000
   result = ri.update([(now[0]-1_000_000, bank(2))])
-  assert result.points and not result.errors.canError
+  assert result.points and not result.errors.radarUnavailableTemporary
 
 
 def test_processing_delay_cannot_publish_a_bank_that_expired_during_update():
@@ -126,7 +126,7 @@ def test_processing_delay_cannot_publish_a_bank_that_expired_during_update():
   clocks = iter([1_000_000_000, 1_300_000_000])
   ri = BoschCLiveRadarInterface(p, sp, clock=lambda: next(clocks))
   result = ri.update([(1_000_000_000, bank())])
-  assert result.errors.canError and not result.points
+  assert result.errors.radarUnavailableTemporary and not result.points
 
 
 def test_future_clock_packet_is_invalid_and_does_not_poison_decoder():

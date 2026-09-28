@@ -62,7 +62,7 @@ def test_all_slots_required_and_raw_diagnostics_preserved(adapter):
   frames = bank(quality=1023, y=8191)
   assert not adapter.update([(0, frames[:15])]).points
   result = adapter.update([(1, frames[15:])])
-  assert len(result.points) == 1 and not result.errors.canError
+  assert len(result.points) == 1 and not result.errors.radarUnavailableTemporary
   with structs.RadarData.from_bytes(result.to_bytes()) as read:
     assert read.points[0].dRel == pytest.approx(25.904)
     assert read.points[0].yRel == pytest.approx(-1 / 128)
@@ -76,12 +76,12 @@ def test_all_slots_required_and_raw_diagnostics_preserved(adapter):
 def test_other_buses_do_not_supply_or_refresh_tracks(adapter, bus):
   frames = [CanData(f.address, f.dat, bus) for f in bank()]
   result = adapter.update([(0, frames)])
-  assert result.errors.canError and not result.points
+  assert result.errors.radarUnavailableTemporary and not result.points
   assert not adapter.decoder.counters
 
 
 @pytest.mark.parametrize('fault', ['crc', 'length', 'duplicate_slot', 'duplicate_id', 'invalid_id', 'phase', 'counter'])
-def test_bad_bank_does_not_refresh_points_and_clean_bank_recovers(adapter, fault):
+def test_bad_bank_does_not_refresh_or_flag_points_and_clean_bank_recovers(adapter, fault):
   first = adapter.update([(0, bank())])
   old = [p.to_dict() for p in first.points]
   frames = bank(1)
@@ -101,11 +101,13 @@ def test_bad_bank_does_not_refresh_points_and_clean_bank_recovers(adapter, fault
     frames = bank(1, phase=5)
   else:
     frames = bank(255)
-  result = adapter.update([(60_000_000, frames)])
-  assert result.errors.canError and [p.to_dict() for p in result.points] == old
-  assert adapter.decoder.last_bank_ns == 0
+  # A rejected bank publishes nothing: no error flag, and the last accepted
+  # points stand until they expire or a clean bank replaces them.
+  assert adapter.update([(60_000_000, frames)]) is None
+  assert adapter.decoder.fault and adapter.decoder.last_bank_ns == 0
+  assert [p.to_dict() for p in adapter.snapshot(60_000_000).points] == old
   recovered = adapter.update([(130_000_000, bank(2))])
-  assert not recovered.errors.canError and len(recovered.points) == 1
+  assert not any(recovered.errors.to_dict().values()) and len(recovered.points) == 1
 
 
 def test_replayed_bank_cannot_refresh_age_and_heartbeat_clears_tracks(adapter):
@@ -113,7 +115,7 @@ def test_replayed_bank_cannot_refresh_age_and_heartbeat_clears_tracks(adapter):
   adapter.update([(150_000_000, bank())])
   assert adapter.decoder.last_bank_ns == 0
   expired = adapter.update([])  # injected monotonic clock, no CAN traffic
-  assert expired.errors.canError and not expired.points
+  assert expired.errors.radarUnavailableTemporary and not expired.points
   assert adapter.decoder.counters['repeated_frames'] == 16
   recovered = adapter.update([(310_000_000, bank())])
   assert recovered.points[0].trackId != initial.points[0].trackId
@@ -140,13 +142,13 @@ def test_complete_empty_bank_removes_objects(adapter):
   adapter.update([(0, bank())])
   empty = [frame(address, 1) for address in OBJECT_IDS]
   result = adapter.update([(60_000_000, empty)])
-  assert not result.points and not result.errors.canError
+  assert not result.points and not result.errors.radarUnavailableTemporary
 
 
 def test_partial_banks_never_mix(adapter):
   adapter.update([(0, bank()[:8])])
   result = adapter.update([(60_000_000, bank(1)[8:])])
-  assert not result.points and result.errors.canError
+  assert not result.points and result.errors.radarUnavailableTemporary
   assert adapter.decoder.counters['incomplete_banks'] == 1
   assert len(adapter.update([(130_000_000, bank(2))]).points) == 1
 
@@ -184,9 +186,9 @@ def test_healthy_stream_emits_banks_and_fault_stream_emits_heartbeats(adapter):
   assert adapter.update([(50_000_000, [])]) is None
   assert adapter.update([(60_000_000, bank(1))]) is not None
   stale = adapter.update([], now_nanos=270_000_000)
-  assert stale.errors.canError and not stale.points
+  assert stale.errors.radarUnavailableTemporary and not stale.points
   assert adapter.update([], now_nanos=280_000_000) is None
-  assert adapter.update([], now_nanos=320_000_000).errors.canError
+  assert adapter.update([], now_nanos=320_000_000).errors.radarUnavailableTemporary
 
 
 def test_default_timeout_clock_matches_can_boottime_after_suspend(monkeypatch):
@@ -212,7 +214,7 @@ def test_default_timeout_clock_matches_can_boottime_after_suspend(monkeypatch):
   assert native.decoder.tracks
   now[0] = can_ns + 201_000_000
   expired = native.update([])
-  assert expired.errors.canError and not expired.points
+  assert expired.errors.radarUnavailableTemporary and not expired.points
   assert clocks == [boot_clock, boot_clock]
 
 
@@ -225,5 +227,19 @@ def test_default_timeout_clock_has_monotonic_fallback(monkeypatch):
   native = BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CALIBRATION)
   native.update([(0, bank())])
   expired = native.update([])
-  assert expired.errors.canError and not expired.points
+  assert expired.errors.radarUnavailableTemporary and not expired.points
   assert clocks == [bosch_c_radar.time.CLOCK_MONOTONIC]
+
+
+def test_rejected_banks_become_unavailable_only_after_the_stale_limit(adapter):
+  adapter.update([(0, bank())])
+  corrupt = []
+  for counter in range(1, 4):
+    frames = bank(counter)
+    f = frames[5]
+    frames[5] = CanData(f.address, f.dat[:-1] + bytes([f.dat[-1] ^ 1]), f.src)
+    corrupt.append(adapter.update([(counter * 66_000_000, frames)]))
+  assert corrupt == [None, None, None]
+  stale = adapter.update([], now_nanos=270_000_000)
+  errors = stale.errors.to_dict()
+  assert errors.pop('radarUnavailableTemporary') and not any(errors.values()) and not stale.points

@@ -246,8 +246,11 @@ class BoschCRadarInterface(RadarInterfaceBase):
         self.guard_rejected += 1
         continue
       points.append(dict(trackId=track.track_id, dRel=x, yRel=y, vRel=v))
+    # A rejected bank publishes nothing and the last accepted tracks age out on
+    # their own. Only a missing stream is reported, as temporarily unavailable
+    # (soft disable), not canError (immediate disable).
     stale = self.decoder.last_bank_ns is None or now_nanos - self.decoder.last_bank_ns > STALE_NS
-    return structs.RadarData.new_message(points=points, errors={'canError': stale or self.decoder.fault})
+    return structs.RadarData.new_message(points=points, errors={'radarUnavailableTemporary': stale})
 
   def update(self, can_packets: list[tuple[int, list[CanData]]], *, now_nanos: int | None = None):
     # Validate the entire batch before mutating state. Preserve frame ordering
@@ -265,10 +268,11 @@ class BoschCRadarInterface(RadarInterfaceBase):
         if self.decoder.feed(stamp, frame) is not None:
           completed = True
     result = self.snapshot(now)
-    changed = result.errors.canError != self.last_error
-    heartbeat = result.errors.canError and (self.last_output_ns is None or now - self.last_output_ns >= 50_000_000)
+    unavailable = result.errors.radarUnavailableTemporary
+    changed = unavailable != self.last_error
+    heartbeat = unavailable and (self.last_output_ns is None or now - self.last_output_ns >= 50_000_000)
     if completed or changed or heartbeat:
-      self.last_output_ns, self.last_error = now, result.errors.canError
+      self.last_output_ns, self.last_error = now, unavailable
       return result
     return None
 
