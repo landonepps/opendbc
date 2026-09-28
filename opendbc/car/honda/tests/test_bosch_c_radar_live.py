@@ -135,3 +135,31 @@ def test_future_clock_packet_is_invalid_and_does_not_poison_decoder():
   assert result.errors.canError and not result.points
   assert ri.decoder.now_ns is None
   assert ri.update([(now[0], bank())]).points
+
+
+def test_uncertainty_gate_requires_radar_setting_and_reaches_live_interface():
+  p, sp = params()
+  _initialize_honda(p, sp, {'HondaBoschCUncertaintyGate': '1'})
+  assert not sp.flags & HondaFlagsSP.BOSCH_C_UNCERTAINTY_GATE and RadarInterface(p, sp).bosch_c is None
+  p, sp = params()
+  _initialize_honda(p, sp, {'HondaBoschCExperimentalRadar': '1', 'HondaBoschCUncertaintyGate': '1'})
+  assert sp.flags & HondaFlagsSP.BOSCH_C_UNCERTAINTY_GATE
+  assert RadarInterface(p, sp).bosch_c.uncertainty_gate
+  p, sp = params()
+  _initialize_honda(p, sp, {'HondaBoschCExperimentalRadar': '1'})
+  assert not RadarInterface(p, sp).bosch_c.uncertainty_gate
+
+
+def test_live_gate_keeps_track_id_after_an_omission():
+  from opendbc.car.honda.tests.test_bosch_c_radar import FAR, SETTLED, objects_bank
+  p, sp = params()
+  configure(p, sp, True, uncertainty_gate=True)
+  clock = [0]
+  radar = BoschCLiveRadarInterface(p, sp, clock=lambda: clock[0])
+  ids = []
+  for counter, u in enumerate((5, 40, 5)):
+    stamp = 1_000_000_000 + counter * 66_000_000
+    clock[0] = stamp + 1_000_000
+    result = radar.update([(stamp, objects_bank(counter, {0: dict(wire=1, x=FAR, uncertainty=u), 1: SETTLED}))])
+    ids.append({pt.trackId for pt in result.points})
+  assert ids == [{1, 2}, {2}, {1, 2}]

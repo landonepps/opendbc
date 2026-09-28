@@ -11,10 +11,10 @@ from opendbc.car.honda.radar_interface import RadarInterface
 CALIBRATION = CandidateCalibration(.05, 4096, -4.296, 1 / 128, .1, 1539)
 
 
-def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1):
+def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1, uncertainty=4):
   value = 0
   fields = [(16, counter), (24, counter % 16 if phase is None else phase), (32, wire), (48, x),
-            (64, y), (80, velocity), (144, quality), (271, 3 * counter % 4096 if life is None else life)]
+            (64, y), (80, velocity), (144, quality), (176, uncertainty), (271, 3 * counter % 4096 if life is None else life)]
   for start, raw in fields:
     value |= raw << start
   payload = value.to_bytes(64, 'little')
@@ -229,6 +229,78 @@ def test_default_timeout_clock_has_monotonic_fallback(monkeypatch):
   expired = native.update([])
   assert expired.errors.radarUnavailableTemporary and not expired.points
   assert clocks == [bosch_c_radar.time.CLOCK_MONOTONIC]
+
+
+def objects_bank(counter, objects):
+  """objects: {slot: dict(wire=..., x=..., uncertainty=...)}; other slots empty."""
+  return [frame(address, counter, **objects.get(slot, {})) for slot, address in enumerate(OBJECT_IDS)]
+
+
+def gated(clock_ns=300_000_000, enabled=True):
+  return BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CALIBRATION, clock=lambda: clock_ns,
+                              uncertainty_gate=enabled)
+
+
+FAR, NEAR = 5000, 4700  # about 40.9 m and 25.9 m with CALIBRATION
+SETTLED = dict(wire=2, x=NEAR, uncertainty=3)
+
+
+def feed(radar, counter, objects):
+  return radar.update([(counter * 66_000_000, objects_bank(counter, objects))])
+
+
+def test_uncertainty_gate_is_off_by_default():
+  radar = gated(enabled=False)
+  result = feed(radar, 0, {0: dict(wire=1, x=FAR, uncertainty=100), 1: SETTLED})
+  assert {p.trackId for p in result.points} == {1, 2}
+
+
+def test_uncertainty_gate_omits_far_newborn_until_settled():
+  radar = gated()
+  for counter, u in enumerate((112, 49, 17, 13)):
+    result = feed(radar, counter, {0: dict(wire=1, x=FAR, uncertainty=u), 1: SETTLED})
+    assert [p.trackId for p in result.points] == [2]
+  result = feed(radar, 4, {0: dict(wire=1, x=FAR, uncertainty=12), 1: SETTLED})
+  assert sorted(p.trackId for p in result.points) == [1, 2]
+  assert radar.decoder.counters['gate_omitted_points'] == 4
+
+
+def test_uncertainty_gate_never_omits_near_points():
+  radar = gated()
+  result = feed(radar, 0, {0: dict(wire=1, x=NEAR, uncertainty=500), 1: SETTLED})
+  assert sorted(p.trackId for p in result.points) == [1, 2]
+
+
+def test_uncertainty_gate_publishes_unmodified_points_under_their_own_id():
+  radar = gated()
+  ungated = gated(enabled=False)
+  for counter, u in enumerate((5, 40, 5)):
+    objects = {0: dict(wire=1, x=FAR, y=300, velocity=1500, uncertainty=u), 1: SETTLED}
+    points = {p.trackId: p for p in feed(radar, counter, objects).points}
+    expected = {p.trackId: p for p in feed(ungated, counter, objects).points}
+    assert points.keys() == ({2} if u > 12 else {1, 2})
+    for track_id, p in points.items():
+      assert p.to_dict() == expected[track_id].to_dict()
+
+
+def test_uncertainty_gate_fails_open_until_the_field_has_ever_settled():
+  radar = gated()
+  result = feed(radar, 0, {0: dict(wire=1, x=FAR, uncertainty=1023)})
+  assert [p.trackId for p in result.points] == [1]
+  assert radar.decoder.counters['gate_fail_open_banks'] == 1
+
+
+def test_uncertainty_gate_omits_a_lone_newborn_but_fails_open_when_the_field_sticks():
+  radar = gated()
+  feed(radar, 0, {1: SETTLED})
+  # A bank with only an unsettled far newborn shortly after a settled object: still gated.
+  assert not feed(radar, 1, {0: dict(wire=1, x=FAR, uncertainty=300)}).points
+  # Stuck above the threshold for more than GATE_FAIL_OPEN_NS: publish ungated.
+  counter = 1
+  while counter * 66_000_000 <= 2_100_000_000:
+    counter += 1
+    result = feed(radar, counter, {0: dict(wire=1, x=FAR, uncertainty=300)})
+  assert [p.trackId for p in result.points] == [2] and radar.decoder.counters['gate_fail_open_banks'] >= 1
 
 
 def test_rejected_banks_become_unavailable_only_after_the_stale_limit(adapter):

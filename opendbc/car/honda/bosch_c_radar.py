@@ -19,6 +19,18 @@ from opendbc.car.interfaces import RadarInterfaceBase
 OBJECT_IDS = tuple(range(0x62, 0x82, 2))
 STALE_NS = 200_000_000
 
+# Opt-in uncertainty gate (research: bosch-c-research docs/undecoded-field-inventory.md).
+# Bits 176-185 track velocity uncertainty (sigma rises monotonically with it);
+# they start high on newborn tracks and decay. Points beyond GATE_RANGE_M are
+# omitted while above GATE_MAX_UNCERTAINTY. Published points are unmodified and
+# keep their trackId: radard drops a track missing from a frame and reseeds it
+# when the id returns.
+GATE_RANGE_M = 30.0
+GATE_MAX_UNCERTAINTY = 12
+# Fail open (publish as ungated) when no object has read at or below the
+# threshold for this long: the field may be stuck or saturated.
+GATE_FAIL_OPEN_NS = 2_000_000_000
+
 
 def can_time_ns():
   # CAN logMonoTime includes suspend time on Linux. Timeout updates must use
@@ -48,6 +60,7 @@ class RawObject:
   quality_container_raw: int
   lateral_velocity_candidate_raw: int
   normalized_rate_candidate_raw: int
+  uncertainty_candidate_raw: int = 0  # bits 176-185; velocity-uncertainty candidate, unitless
 
   @property
   def signed_y_raw(self):
@@ -64,7 +77,7 @@ def unpack(address: int, payload: bytes) -> RawObject:
 
   return RawObject((address - 0x62) // 2, bits(32, 16), payload[2], payload[3] & 15,
                    bits(271, 12), bits(48, 13), bits(61, 3), bits(64, 13), bits(77, 3),
-                   bits(80, 11), bits(144, 16), bits(96, 10), bits(128, 16))
+                   bits(80, 11), bits(144, 16), bits(96, 10), bits(128, 16), bits(176, 10))
 
 
 @dataclass(frozen=True)
@@ -222,7 +235,8 @@ class BoschCRadarInterface(RadarInterfaceBase):
   updates use the CAN boot clock for timeout reporting; replay may supply
   now_nanos explicitly. No messages are sent and CarParams is never modified.
   """
-  def __init__(self, CP, CP_SP, *, calibration: CandidateCalibration, bus: int = 1, clock=can_time_ns):
+  def __init__(self, CP, CP_SP, *, calibration: CandidateCalibration, bus: int = 1, clock=can_time_ns,
+               uncertainty_gate: bool = False):
     if CP.carFingerprint != CAR.HONDA_CRV_6G or CP.brand != 'honda':
       raise ValueError('Bosch C research adapter is restricted to HONDA_CRV_6G')
     super().__init__(CP, CP_SP)
@@ -232,6 +246,26 @@ class BoschCRadarInterface(RadarInterfaceBase):
     self.last_output_ns = None
     self.last_error = None
     self.guard_rejected = 0
+    self.uncertainty_gate = uncertainty_gate
+    self.gate_last_settled_ns = None
+
+  def apply_uncertainty_gate(self, result):
+    raw = {t.track_id: t.raw for t in self.decoder.tracks.values()}
+    bank_ns = self.decoder.last_bank_ns
+    if any(r.uncertainty_candidate_raw <= GATE_MAX_UNCERTAINTY for r in raw.values()):
+      self.gate_last_settled_ns = bank_ns
+    if self.gate_last_settled_ns is None or bank_ns is None or bank_ns - self.gate_last_settled_ns > GATE_FAIL_OPEN_NS:
+      if raw:
+        self.decoder.counters['gate_fail_open_banks'] += 1
+      return result
+    points = []
+    for p in result.points:
+      if p.dRel > GATE_RANGE_M and raw[p.trackId].uncertainty_candidate_raw > GATE_MAX_UNCERTAINTY:
+        self.decoder.counters['gate_omitted_points'] += 1
+      else:
+        points.append(p.to_dict())
+    result.points = points
+    return result
 
   def snapshot(self, now_nanos: int):
     self.decoder.expire(now_nanos)
@@ -273,7 +307,7 @@ class BoschCRadarInterface(RadarInterfaceBase):
     heartbeat = unavailable and (self.last_output_ns is None or now - self.last_output_ns >= 50_000_000)
     if completed or changed or heartbeat:
       self.last_output_ns, self.last_error = now, unavailable
-      return result
+      return self.apply_uncertainty_gate(result) if self.uncertainty_gate else result
     return None
 
   def diagnostics(self):
@@ -282,6 +316,7 @@ class BoschCRadarInterface(RadarInterfaceBase):
     return dict(schema_version=1, experimental=True, platform=str(self.CP.carFingerprint), receive_bus=self.decoder.bus,
                 timestamp_ns=now, last_bank_ns=last, bank_age_s=(now-last)*1e-9 if last is not None else None,
                 counters=dict(self.decoder.counters), pending_slots=len(self.decoder.pending),
+                uncertainty_gate=self.uncertainty_gate,
                 calibration=asdict(self.calibration), guard_rejected=self.guard_rejected,
                 tracks=[dict(track_id=t.track_id, time_ns=t.time_ns, first_seen_ns=t.first_seen_ns, raw=asdict(t.raw))
                         for t in self.decoder.tracks.values()])

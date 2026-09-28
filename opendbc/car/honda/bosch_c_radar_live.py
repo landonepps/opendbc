@@ -21,17 +21,20 @@ def supported(CP):
           bool(CP.flags & HondaFlags.BOSCH_CANFD) and CP.openpilotLongitudinalControl and CanBus(CP).radar == 1)
 
 
-def configure(CP, CP_SP, enabled):
+def configure(CP, CP_SP, enabled, uncertainty_gate=False):
   """Called after stock-longitudinal overrides; never enable longitudinal here."""
   if enabled and supported(CP):
     CP_SP.flags |= HondaFlagsSP.EXPERIMENTAL_BOSCH_C_RADAR.value
     CP.radarUnavailable = False
+    if uncertainty_gate:
+      CP_SP.flags |= HondaFlagsSP.BOSCH_C_UNCERTAINTY_GATE.value
 
 
 class BoschCLiveRadarInterface(BoschCRadarInterface):
   def __init__(self, CP, CP_SP, **kwargs):
     if not supported(CP) or CP.radarUnavailable or not (CP_SP.flags & HondaFlagsSP.EXPERIMENTAL_BOSCH_C_RADAR):
       raise ValueError('Bosch C live radar requires explicit supported enabled-mode configuration')
+    kwargs.setdefault('uncertainty_gate', bool(CP_SP.flags & HondaFlagsSP.BOSCH_C_UNCERTAINTY_GATE))
     super().__init__(CP, CP_SP, calibration=PROVISIONAL_CALIBRATION, bus=1, **kwargs)
 
   def update(self, can_packets):
