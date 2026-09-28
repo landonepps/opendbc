@@ -1,7 +1,9 @@
 """Default-off Bosch C integration for the tested CR-V and receive-bus layout.
 
-Distance and velocity use the accepted working conversions; lateral calibration
-remains provisional. This module sends no CAN and changes no safety, silencing,
+Distance, velocity and lateral position use the accepted working conversions
+(lateral 0.01 m/count since 2026-09-28, from gyro yaw kinematics, camera lateral
+and azimuth-field consistency; previously 1/128). None is a recovered firmware
+constant. This module sends no CAN and changes no safety, silencing,
 fusion or controller algorithms. Activation is read at startup.
 """
 from opendbc.car import structs
@@ -11,7 +13,7 @@ from opendbc.car.honda.values import CAR, HondaFlags
 from opendbc.sunnypilot.car.honda.values_ext import HondaFlagsSP
 
 
-PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 4096, -4.296000000000001, 1 / 128, .1, 1539)
+PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 4096, -4.296000000000001, .01, .1, 1539)
 
 
 def supported(CP):
