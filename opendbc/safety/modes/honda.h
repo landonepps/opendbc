@@ -523,9 +523,21 @@ static safety_config honda_bosch_init(uint16_t param) {
                                               {0x310, 2, 8, .check_relay = false}, {0x6CD5558, 2, 8, .check_relay = true}, {0x6CD5559, 2, 8, .check_relay = false},
                                               {0xF31AA52, 2, 8, .check_relay = false}, {0xF31AA5C, 2, 8, .check_relay = true}, {0x1A45AA4E, 2, 8, .check_relay = false}};
 
+  // CR-V 6G and Pilot 4G radars author LANE_PATH, HUD_OBJECTS and the lane summary at the Bosch radarless addresses
+  // (0x6CD5554, 0x6CD5557, 0xF31AA54) instead of 0x6CD5558, 0x6CD5559 and 0xF31AA5C. Identical to the list above with
+  // only those three look-alikes swapped, each keeping its counterpart's buses and relay check.
+  static CanMsg HONDA_CANFD_LONG_RADARLESS_HUD_TX_MSGS[] = {{0xE4, 0, 5, .check_relay = true}, {0x1DF, 0, 8, .check_relay = true}, {0x1EF, 0, 8, .check_relay = false},
+                                                            {0x30C, 0, 8, .check_relay = false}, {0x33D, 0, 8, .check_relay = true}, {0x296, 2, 4, .check_relay = false},
+                                                            {0x18DAB0F1, 0, 8, .check_relay = false},
+                                                            {0x310, 0, 8, .check_relay = false}, {0x6CD5554, 0, 8, .check_relay = true}, {0x6CD5557, 0, 8, .check_relay = false},
+                                                            {0xF31AA52, 0, 8, .check_relay = false}, {0xF31AA54, 0, 8, .check_relay = true}, {0x1A45AA4E, 0, 8, .check_relay = false},
+                                                            {0x310, 2, 8, .check_relay = false}, {0x6CD5554, 2, 8, .check_relay = true}, {0x6CD5557, 2, 8, .check_relay = false},
+                                                            {0xF31AA52, 2, 8, .check_relay = false}, {0xF31AA54, 2, 8, .check_relay = true}, {0x1A45AA4E, 2, 8, .check_relay = false}};
+
   const uint16_t HONDA_PARAM_ALT_BRAKE = 1;
   const uint16_t HONDA_PARAM_RADARLESS = 8;
   const uint16_t HONDA_PARAM_BOSCH_CANFD = 16;
+  const uint16_t HONDA_PARAM_CANFD_RADARLESS_HUD_ADDR = 128;
 
   // Bosch radarless and CAN-FD have the powertrain bus on bus 0
   static RxCheck honda_bosch_pt0_rx_checks[] = {
@@ -584,7 +596,9 @@ static safety_config honda_bosch_init(uint16_t param) {
       SET_TX_MSGS(HONDA_RADARLESS_TX_MSGS, ret);
     }
   } else if (honda_bosch_canfd) {
-    if (honda_bosch_long) {
+    if (honda_bosch_long && GET_FLAG(param, HONDA_PARAM_CANFD_RADARLESS_HUD_ADDR)) {
+      SET_TX_MSGS(HONDA_CANFD_LONG_RADARLESS_HUD_TX_MSGS, ret);
+    } else if (honda_bosch_long) {
       SET_TX_MSGS(HONDA_CANFD_LONG_TX_MSGS, ret);
     } else {
       SET_TX_MSGS(HONDA_CANFD_TX_MSGS, ret);

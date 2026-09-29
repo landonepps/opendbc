@@ -230,8 +230,9 @@ def lead_from_model(model, v_ego):
   return leads_from_model(model, v_ego, n=1)[0]
 
 
-def create_hud_object(packer, bus, mux, track):
-  """Pack one HUD_OBJECTS frame for mux.
+def create_hud_object(packer, bus, mux, track, name="HUD_OBJECTS"):
+  """Pack one HUD_OBJECTS frame for mux. `name` selects the address (CAN FD: HUD_OBJECTS_ALT on platforms whose
+  radar uses the radarless address).
 
   `track` is None for an inactive slot, else a dict {d_rel, y_rel, object_id, is_lead_car, car_type, rotation}.
   CAR_TYPE/ROTATION are borrowed from the stock camera (OP doesn't provide them); CHECKSUM/COUNTER by the packer.
@@ -248,7 +249,7 @@ def create_hud_object(packer, bus, mux, track):
       "LONG_DIST": min(max(track["d_rel"], 0.0), LONG_DIST_MAX_M),
       "LAT_DIST": min(max(track["y_rel"], -LAT_DIST_LIM_M), LAT_DIST_LIM_M),
     })
-  return packer.make_can_msg("HUD_OBJECTS", bus, values)
+  return packer.make_can_msg(name, bus, values)
 
 
 def forward_hud_object(packer, bus, mux, tracks):
@@ -344,7 +345,7 @@ class HudObjectAuthor:
     self._prev_op_id = op_id
     return self._lead_id
 
-  def create(self, packer, bus, lead, tracks, mux: int, now: float, extra_leads=None, canfd: bool = False):
+  def create(self, packer, bus, lead, tracks, mux: int, now: float, extra_leads=None, canfd: bool = False, name="HUD_OBJECTS"):
     """`lead` = carControlSP.leadOne; `tracks` = the camera's HudObject snapshot (may be None); `mux` = the shared
     LANE_PATH/HUD_OBJECTS multiplexor for this frame. Returns one packed HUD_OBJECTS frame for the slot the mux lands
     on (OP's lead in slot 0, else a forwarded camera adjacent car — including in slot 0 when OP has no lead — else
@@ -387,4 +388,4 @@ class HudObjectAuthor:
                 "car_type": st.car_type, "rotation": st.rotation}
                 # never forward the camera's lead: if OP has no lead, the HUD must not flag one OP isn't acting on
                if (st is not None and st.valid and not st.is_lead_car) else None)
-    return create_hud_object(packer, bus, mux, track)
+    return create_hud_object(packer, bus, mux, track, name)

@@ -209,6 +209,12 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
     self.CAN = hondacan.CanBus(CP)
     self.hud_object_author = hud_objects.HudObjectAuthor()
     self.lane_path_fitter = lane_path.LanePathFitter()
+    # CAN FD dash look-alikes must go where this car's own radar sends them: the CR-V 6G and Pilot 4G radars use
+    # the Bosch radarless addresses, the others the MDX ones (the cluster presumably reads only its radar's set).
+    radarless_hud_addr = bool(CP.flags & HondaFlags.CANFD_RADARLESS_HUD_ADDR)
+    self.lane_path_msg = "LANE_PATH_ALT" if radarless_hud_addr else "LANE_PATH"
+    self.hud_objects_msg = "HUD_OBJECTS_ALT" if radarless_hud_addr else "HUD_OBJECTS"
+    self.radar_lead_msg = "RADAR_LEAD_ALT" if radarless_hud_addr else "RADAR_LEAD"
     self.dash_lane = lane_path.DashLane([lane_path.OFFSET_UNAVAILABLE] * lane_path.NUM_PTS, 0.0, False, False)
     self.lkas_hud_key = None
     self.lkas_state_change_frames = 0
@@ -602,7 +608,8 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
         radar_msgs.extend(hondacan.create_canfd_5hz_radar_messages(self.packer, self.CAN.pt, CS.radar_ref_counter,
                                                                    lane_path.canfd_lane_length(self.dash_lane),
                                                                    lane_path.LANE_LINE_ON if self.dash_lane.left_line else 0,
-                                                                   lane_path.LANE_LINE_ON if self.dash_lane.right_line else 0))
+                                                                   lane_path.LANE_LINE_ON if self.dash_lane.right_line else 0,
+                                                                   radar_lead_name=self.radar_lead_msg))
 
       # mirror each packed frame onto both the powertrain bus and the camera bus
       for addr, dat, _ in radar_msgs:
@@ -1159,7 +1166,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       else:
         mux = lane_path.MUX_CYCLE[(self.frame // 2) % len(lane_path.MUX_CYCLE)]
         lane_offsets = self.dash_lane.offsets
-      lane_msg = lane_path.create_lane_path(self.packer, self.CAN.lkas, lane_offsets, mux)
+      lane_msg = lane_path.create_lane_path(self.packer, self.CAN.lkas, lane_offsets, mux, self.lane_path_msg)
       can_sends.append(lane_msg)
 
       # CAN FD cars have no camera HUD_OBJECTS to poll (the disabled radar owned it), so there are no
@@ -1168,7 +1175,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       if self.CP.openpilotLongitudinalControl:
         # For OP long, replace lead car and forward rest of objects
         hud_msg = self.hud_object_author.create(self.packer, self.CAN.lkas, lead, tracks, mux, now_nanos * 1e-9,
-                                                extra_leads=leads[1:], canfd=canfd)
+                                                extra_leads=leads[1:], canfd=canfd, name=self.hud_objects_msg)
       else:
         # For ACC, forward objects but with our mux
         hud_msg = hud_objects.forward_hud_object(self.packer, self.CAN.lkas, mux, tracks)

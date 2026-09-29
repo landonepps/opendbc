@@ -59,6 +59,8 @@ class HondaSafetyFlags(IntFlag):
   NIDEC_HYBRID = 32
   # RLX: a bridge panda relays the stock camera's LKAS_HUD from the steer bus onto the powertrain bus
   RLX_STEER_BRIDGE = 64
+  # CAN FD: the radar's dash look-alikes live at the Bosch radarless addresses (see HondaFlags.CANFD_RADARLESS_HUD_ADDR)
+  CANFD_RADARLESS_HUD_ADDR = 128
 
 
 class HondaFlags(IntFlag):
@@ -79,7 +81,9 @@ class HondaFlags(IntFlag):
 
   HAS_ALL_DOOR_STATES = 256  # Some Hondas have all door states, others only driver door
   BOSCH_ALT_RADAR = 512
-  # 1024 is available
+  # CAN FD cars whose radar authors LANE_PATH, HUD_OBJECTS and the lane summary at the Bosch radarless addresses
+  # (0x6CD5554, 0x6CD5557, 0xF31AA54) rather than the MDX ones (0x6CD5558, 0x6CD5559, 0xF31AA5C)
+  CANFD_RADARLESS_HUD_ADDR = 1024
   HYBRID = 2048
   BOSCH_TJA_CONTROL = 4096
   LKAS_MINSPEED_CUTOFF = 8192
@@ -236,6 +240,7 @@ class CAR(Platforms):
       HondaCarDocs("Honda CR-V Hybrid 2023-26", "All"),
     ],
     CarSpecs(mass=1703, wheelbase=2.7, steerRatio=16.2, centerToFrontRatio=0.42),
+    flags=HondaFlags.CANFD_RADARLESS_HUD_ADDR,
   )
   HONDA_CRV_HYBRID = HondaBoschPlatformConfig(
     [HondaCarDocs("Honda CR-V Hybrid 2017-22", min_steer_speed=12. * CV.MPH_TO_MS)],
@@ -284,6 +289,7 @@ class CAR(Platforms):
   HONDA_PILOT_4G = HondaBoschCANFDPlatformConfig(
     [HondaCarDocs("Honda Pilot 2023-25", "All")],
     CarSpecs(mass=4660 * CV.LB_TO_KG, wheelbase=2.89, centerToFrontRatio=0.442, steerRatio=17.5),
+    flags=HondaFlags.CANFD_RADARLESS_HUD_ADDR,
   )
   HONDA_PILOT_4G_MMR = HondaBoschCANFDPlatformConfig( # Mid-Model Refresh has more powerful EPS
     [HondaCarDocs("Honda Pilot 2026", "All")],

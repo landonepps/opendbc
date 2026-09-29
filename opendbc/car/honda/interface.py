@@ -303,6 +303,9 @@ class CarInterface(CarInterfaceBase):
       ret.safetyConfigs[-1].safetyParam |= HondaSafetyFlags.RADARLESS.value
     if ret.flags & HondaFlags.BOSCH_CANFD:
       ret.safetyConfigs[-1].safetyParam |= HondaSafetyFlags.BOSCH_CANFD.value
+    # only the openpilot longitudinal TX list authors the dash look-alikes, so stock ACC keeps its param
+    if ret.openpilotLongitudinalControl and ret.flags & HondaFlags.BOSCH_CANFD and ret.flags & HondaFlags.CANFD_RADARLESS_HUD_ADDR:
+      ret.safetyConfigs[-1].safetyParam |= HondaSafetyFlags.CANFD_RADARLESS_HUD_ADDR.value
     if candidate == CAR.ACURA_RLX_HYBRID:
       ret.safetyConfigs[-1].safetyParam |= HondaSafetyFlags.RLX_STEER_BRIDGE.value
 

@@ -1019,6 +1019,9 @@ class SafetyTest(SafetyTestBase):
               continue
             if attr.startswith('TestFord') and current_test.startswith('TestFord'):
               continue
+            # same CAN FD longitudinal mode, differing only in the dash look-alike addresses (checked by test_dash_hud_addresses)
+            if {attr, current_test}.issubset({'TestHondaBoschCANFDLongSafety', 'TestHondaBoschCANFDLongRadarlessHudSafety'}):
+              continue
             if attr.startswith('TestHyundaiCanfd') and current_test.startswith('TestHyundaiCanfd'):
               continue
             if {attr, current_test}.issubset({'TestHyundaiLongitudinalSafety', 'TestHyundaiLongitudinalSafetyCameraSCC', 'TestHyundaiSafetyFCEVLong'}):

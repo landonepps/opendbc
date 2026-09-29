@@ -338,7 +338,8 @@ def create_canfd_50hz_radar_messages(packer, bus, radar_mux):
   return commands
 
 
-def create_canfd_5hz_radar_messages(packer, bus, radar_ref_cntr, lane_path_length=6, left_lane=0, right_lane=0):
+def create_canfd_5hz_radar_messages(packer, bus, radar_ref_cntr, lane_path_length=6, left_lane=0, right_lane=0,
+                                    radar_lead_name='RADAR_LEAD'):
   commands = []
 
   radar_lead_values = {
@@ -355,7 +356,7 @@ def create_canfd_5hz_radar_messages(packer, bus, radar_ref_cntr, lane_path_lengt
     # this against the path's in-band 2047 terminator; a mismatch suppresses the lane-line rendering.
     'LANE_PATH_LENGTH': lane_path_length,
   }
-  commands.append(packer.make_can_msg('RADAR_LEAD', bus, radar_lead_values))
+  commands.append(packer.make_can_msg(radar_lead_name, bus, radar_lead_values))
 
   radar_lead2_values = {
     'SET_ME_X88': 136,

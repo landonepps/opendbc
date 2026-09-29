@@ -956,6 +956,52 @@ class TestHondaBoschCANFDLongSafety(TestHondaBoschLongSafety, TestHondaBoschCANF
     trailing_bytes = libsafety_py.make_CANPacket(0x18DAB0F1, self.PT_BUS, b"\x02\x10\x03\x00\x00\x00\x00\x01")
     self.assertFalse(self._tx(trailing_bytes))
 
+  # dash look-alikes (LANE_PATH, HUD_OBJECTS, lane summary): outside SCANNED_ADDRS, so checked explicitly here
+  MDX_HUD_ADDRS = (0x6CD5558, 0x6CD5559, 0xF31AA5C)
+  RADARLESS_HUD_ADDRS = (0x6CD5554, 0x6CD5557, 0xF31AA54)
+
+  def _check_dash_hud_tx(self, allowed, blocked):
+    for controls_allowed in (False, True):
+      self.safety.set_controls_allowed(controls_allowed)
+      for bus in (0, 2):
+        for addr in allowed:
+          self.assertTrue(self._tx(common.make_msg(bus, addr, 8)), f"{addr=:#x} {bus=}")
+        for addr in blocked:
+          self.assertFalse(self._tx(common.make_msg(bus, addr, 8)), f"{addr=:#x} {bus=}")
+      for addr in (*allowed, *blocked):
+        self.assertFalse(self._tx(common.make_msg(1, addr, 8)), f"{addr=:#x} bus=1")
+
+  def test_dash_hud_addresses(self):
+    self._check_dash_hud_tx(self.MDX_HUD_ADDRS, self.RADARLESS_HUD_ADDRS)
+
+
+class TestHondaBoschCANFDLongRadarlessHudSafety(TestHondaBoschCANFDLongSafety):
+  """
+    Covers the Honda Bosch CANFD safety mode with longitudinal control on cars whose radar authors the dash
+    look-alikes at the Bosch radarless addresses (CR-V 6G, Pilot 4G)
+  """
+
+  TX_MSGS = TestHondaBoschCANFDLongSafety.TX_MSGS + [[0x6CD5554, 0], [0x6CD5554, 2], [0x6CD5557, 0], [0x6CD5557, 2],
+                                                     [0xF31AA54, 0], [0xF31AA54, 2]]
+  # LANE_PATH and the lane summary keep their MDX counterparts' relay check on both buses; HUD_OBJECTS has none
+  FWD_BLACKLISTED_ADDRS = {0: [0x6CD5554, 0xF31AA54], 2: [0xE4, 0x1DF, 0x33D, 0x6CD5554, 0xF31AA54]}
+  RELAY_MALFUNCTION_ADDRS = {0: (0xE4, 0x1DF, 0x33D, 0x6CD5554, 0xF31AA54), 2: (0x6CD5554, 0xF31AA54)}
+
+  def setUp(self):
+    super().setUp()
+    self.safety.set_safety_hooks(CarParams.SafetyModel.hondaBosch, HondaSafetyFlags.BOSCH_CANFD | HondaSafetyFlags.BOSCH_LONG |
+                                 HondaSafetyFlags.CANFD_RADARLESS_HUD_ADDR)
+    self.safety.init_tests()
+
+  def test_dash_hud_addresses(self):
+    self._check_dash_hud_tx(self.RADARLESS_HUD_ADDRS, self.MDX_HUD_ADDRS)
+
+  def test_dash_hud_addresses_stock_longitudinal(self):
+    # the flag alone (stock ACC, where the real radar owns the dash messages) allows neither set
+    self.safety.set_safety_hooks(CarParams.SafetyModel.hondaBosch, HondaSafetyFlags.BOSCH_CANFD | HondaSafetyFlags.CANFD_RADARLESS_HUD_ADDR)
+    self.safety.init_tests()
+    self._check_dash_hud_tx((), (*self.RADARLESS_HUD_ADDRS, *self.MDX_HUD_ADDRS))
+
 
 class TestHondaNidecHybridSafety(TestHondaNidecPcmSafety):
   """

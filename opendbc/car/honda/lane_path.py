@@ -116,8 +116,9 @@ def canfd_lane_offsets(dash_lane) -> list[int]:
   return list(dash_lane.offsets[:n_valid]) + [OFFSET_UNAVAILABLE] * (NUM_PTS - n_valid)
 
 
-def create_lane_path(packer, bus, offsets, mux):
-  """Pack one LANE_PATH frame for `mux` (one of MUX_CYCLE) from the 40-offset array."""
+def create_lane_path(packer, bus, offsets, mux, name="LANE_PATH"):
+  """Pack one LANE_PATH frame for `mux` (one of MUX_CYCLE) from the 40-offset array. `name` selects the
+  address (CAN FD: LANE_PATH_ALT on platforms whose radar uses the radarless address)."""
   base = ((mux - 1) % 16) * OFFSETS_PER_INDEX
   values = {
     "MUX": mux,
@@ -126,7 +127,7 @@ def create_lane_path(packer, bus, offsets, mux):
     "PATH_OFFSET_3": offsets[base + 2],
     "PATH_OFFSET_4": offsets[base + 3],
   }
-  return packer.make_can_msg("LANE_PATH", bus, values)
+  return packer.make_can_msg(name, bus, values)
 
 
 def create_lkas_hud_2(packer, bus, counter_2, reach=1.0, lane_cross=0, left_line=True, right_line=True):
