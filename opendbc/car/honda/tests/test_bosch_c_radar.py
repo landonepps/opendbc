@@ -8,7 +8,7 @@ from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalib
 from opendbc.car.honda.radar_interface import RadarInterface
 
 
-CALIBRATION = CandidateCalibration(.05, 4096, -4.296, 1 / 128, .1, 1539)
+CALIBRATION = CandidateCalibration(.05, 0, -4.296, 1 / 128, .1, 1539)
 
 
 def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1, uncertainty=4):
@@ -45,7 +45,7 @@ def test_required_explicit_calibration_and_platform_gate():
     BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CALIBRATION, bus=129)
   for value in (float('nan'), float('inf'), 0, -1):
     with pytest.raises(ValueError):
-      CandidateCalibration(value, 4096, 0, 1 / 128, .1, 1539)
+      CandidateCalibration(value, 0, 0, 1 / 128, .1, 1539)
 
 
 def test_normal_honda_interface_and_carparams_unchanged():

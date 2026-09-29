@@ -15,7 +15,7 @@ from opendbc.car.honda.values import CAR, HondaFlags
 from opendbc.sunnypilot.car.honda.values_ext import HondaFlagsSP
 
 
-PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 4096, -4.296000000000001, .01, .1, 1539)
+PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 0, -4.296000000000001, .01, .1, 1539)
 
 
 def supported(CP):
