@@ -388,6 +388,23 @@ def test_shipped_dbc_ego_motion_fields():
     assert dbc['LAT_ACCEL'] == pytest.approx(signed(payload[10], 8) * 0.198)
 
 
+def test_shipped_dbc_camera_lane_lines():
+  # 0xC8 on the private camera-radar bus (research: bosch-c-research docs/honda-camera-lanes-bus1.md)
+  import random
+  from opendbc.can import CANParser
+
+  rng = random.Random(0)
+  parser = CANParser('honda_bosch_c_radar', [(0xC8, 0)], 1)
+  for step in range(50):
+    payload = bytes(rng.getrandbits(8) for _ in range(32))
+    parser.update([(step, [(0xC8, payload, 1)])])
+    dbc, value = parser.vl[0xC8], int.from_bytes(payload, 'little')
+    # line records at bits 24 (left) and 139 (right): 12-bit offset binary at +19, no-line code at +60
+    for side, base in (('LEFT', 24), ('RIGHT', 139)):
+      assert dbc[f'{side}_LINE_OFFSET'] == pytest.approx((((value >> (base + 19)) & 4095) - 2048) / 128)
+      assert dbc[f'{side}_LINE_CODE'] == (value >> (base + 60)) & 7
+
+
 def status_x(raw12, status):
   # 48:12 range plus the 60:4 status field, laid out as the 16 bits from bit 48
   return raw12 | (status << 12)

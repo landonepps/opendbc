@@ -749,6 +749,12 @@ BO_ 1025 BOSCH_C_EGO_MOTION: 64 UNKNOWN
  SG_ STEER_ANGLE_CANDIDATE_RAW : 103|9@1- (1,0) [-256|255] "" LOGGER
  SG_ ACCEL_CANDIDATE_RAW : 88|8@1- (1,0) [-128|127] "" LOGGER
 
+BO_ 200 CAMERA_EGO_LANE_LINES: 32 UNKNOWN
+ SG_ LEFT_LINE_OFFSET : 43|12@1+ (0.0078125,-16) [-16|15.9921875] "m" LOGGER
+ SG_ LEFT_LINE_CODE : 84|3@1+ (1,0) [0|7] "" LOGGER
+ SG_ RIGHT_LINE_OFFSET : 158|12@1+ (0.0078125,-16) [-16|15.9921875] "m" LOGGER
+ SG_ RIGHT_LINE_CODE : 199|3@1+ (1,0) [0|7] "" LOGGER
+
 CM_ "Receive-only schema for analysis tools. Message producer is not independently identified. Unknown bytes are deliberately omitted. Scaled signals are the accepted working conversions; *_CANDIDATE_RAW names are unaccepted research hypotheses whose status is in each comment; accepted raw fields drop CANDIDATE. The runtime adapter (opendbc/car/honda/bosch_c_radar.py) decodes these bits itself because it verifies the CRC and 16-message bank coherence. The accepted decodes read the same on radar firmware 8S302-3A0-A220 and 8S302-3A0-A230 (checked 2026-09-29).";
 BA_DEF_ BO_ "VFrameFormat" ENUM "StandardCAN","ExtendedCAN","reserved","J1939PG","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
 BA_ "VFrameFormat" BO_ 98 14;
@@ -1334,6 +1340,12 @@ CM_ SG_ 1025 LAT_ACCEL "Accepted 2026-09-29: lateral acceleration, positive left
 CM_ SG_ 1025 SPEED_CANDIDATE_RAW "Ego speed, provisional: 0.0683*raw+0.054 m/s against vEgo (median error 0.07 m/s; passes on 59 of 59 held-out stock routes; the held-out rule failed only on alpha routes, where it reads 0). Byte 3 then byte 4 bits 7-6.";
 CM_ SG_ 1025 STEER_ANGLE_CANDIDATE_RAW "Steering angle, provisional: raw is positive right; -2.008*raw+0.3 gives carState steeringAngleDeg in deg (positive left), median error about 1 deg; passes on 59 of 59 held-out stock routes.";
 CM_ SG_ 1025 ACCEL_CANDIDATE_RAW "Longitudinal acceleration, provisional: -0.1896*raw m/s^2 against carState aEgo, median error 0.08 m/s^2; passes on 59 of 59 held-out stock routes.";
+BA_ "VFrameFormat" BO_ 200 14;
+CM_ BO_ 200 "The stock camera's lane lines for the ego lane, sent to the radar on the private camera-radar bus (bus 1) at 15 Hz: left line in bits 24-138, right line in bits 139-253. 0xCA (next lines out), 0xCC and 0xCE share the layout; they, and each line's heading, curvature and quality fields, are candidates only.";
+CM_ SG_ 200 LEFT_LINE_OFFSET "Accepted 2026-09-29: lateral offset of the left line, (raw-2048)/128 m, positive left; 2048 with no line. On 16 held-out routes 0.8484*offset+0.2399 m matches the model lane line 0.2 s earlier within 0.042 m median, slope 1.010. The 1/128 m scale is physically plausible: left minus right offset at highway speed is 3.52 m median on 10 held-out routes (model 3.39 m), close to 3.6-3.7 m US freeway lanes.";
+CM_ SG_ 200 LEFT_LINE_CODE "7 = no line (accepted 2026-09-29 by user decision). Where the model lane probability is below 0.2 it reads 7 on 90.5% of held-out frames, against a frozen 95%; the rest are mostly lines the model doubts, visible on video in 7 of 12 sampled frames. 0-4 when a line is reported (line type, candidate). Raised median curbs can read as lines.";
+CM_ SG_ 200 RIGHT_LINE_OFFSET "Accepted 2026-09-29: lateral offset of the right line, (raw-2048)/128 m, positive left; 2048 with no line. On 16 held-out routes 0.8796*offset-0.0968 m matches the model lane line 0.2 s earlier within 0.043 m median, slope 0.995. Scale check: see LEFT_LINE_OFFSET.";
+CM_ SG_ 200 RIGHT_LINE_CODE "7 = no line (accepted 2026-09-29 by user decision). Where the model lane probability is below 0.2 it reads 7 on 92.1% of held-out frames, against a frozen 95%. 0-4 when a line is reported (line type, candidate).";
 CM_ SG_ 98 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
 CM_ SG_ 98 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 98 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
@@ -1462,3 +1474,5 @@ VAL_ 122 OBJECT_CLASS_RAW 3 "TRUCK" 1 "CAR" ;
 VAL_ 124 OBJECT_CLASS_RAW 3 "TRUCK" 1 "CAR" ;
 VAL_ 126 OBJECT_CLASS_RAW 3 "TRUCK" 1 "CAR" ;
 VAL_ 128 OBJECT_CLASS_RAW 3 "TRUCK" 1 "CAR" ;
+VAL_ 200 LEFT_LINE_CODE 7 "NO_LINE" ;
+VAL_ 200 RIGHT_LINE_CODE 7 "NO_LINE" ;
