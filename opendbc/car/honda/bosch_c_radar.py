@@ -54,8 +54,8 @@ class RawObject:
   lifecycle: int
   range_raw: int  # bits 48-59
   status: int     # bits 60-63: object class. 1 car, 3 truck, 6 motorcycle, 7 pedestrian, 8 bicycle
-  y_raw: int
-  y_companion_raw: int
+  y_raw: int            # bits 64-76; bit 77 (the low bit of y_companion_raw) is the top bit of the lateral
+  y_companion_raw: int  # bits 77-79
   velocity_raw: int
   quality_container_raw: int
   lateral_velocity_candidate_raw: int
@@ -64,7 +64,10 @@ class RawObject:
 
   @property
   def signed_y_raw(self):
-    return self.y_raw - 8192 if self.y_raw & 4096 else self.y_raw
+    # 14-bit offset binary, bits 64-77 minus 8192 (research: bosch-c-research docs/lateral-velocity-96-10.md).
+    # Within +-40.95 m bit 77 is the inverse of bit 76, so this equals the 13-bit two's complement value. A 13-bit
+    # decode wraps beyond that, and objects 62-82 m to the side would read as within 20 m of the path.
+    return self.y_raw + ((self.y_companion_raw & 1) << 13) - 8192
 
 
 def unpack(address: int, payload: bytes) -> RawObject:

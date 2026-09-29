@@ -11,10 +11,13 @@ from opendbc.car.honda.radar_interface import RadarInterface
 CALIBRATION = CandidateCalibration(.05, 0, -4.296, 1 / 128, .1, 1539)
 
 
-def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1, uncertainty=4):
+def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1, uncertainty=4, y14=None):
+  # y is the 13-bit two's complement lateral; the radar sets bit 77 to the inverse of bit 76 within +-40.95 m.
+  # y14 overrides it with the full 14-bit offset-binary value at bits 64-77.
   value = 0
+  y14 = y | ((0 if y & 4096 else 1) << 13) if y14 is None else y14
   fields = [(16, counter), (24, counter % 16 if phase is None else phase), (32, wire), (48, x),
-            (64, y), (80, velocity), (144, quality), (176, uncertainty), (271, 3 * counter % 4096 if life is None else life)]
+            (64, y14), (80, velocity), (144, quality), (176, uncertainty), (271, 3 * counter % 4096 if life is None else life)]
   for start, raw in fields:
     value |= raw << start
   payload = value.to_bytes(64, 'little')
@@ -70,6 +73,23 @@ def test_all_slots_required_and_raw_diagnostics_preserved(adapter):
   report = adapter.diagnostics()
   assert report['tracks'][0]['raw']['quality_container_raw'] == 1023
   assert report['calibration'] == asdict(CALIBRATION)
+
+
+@pytest.mark.parametrize('y14, meters', [(8192 + 4115, 41.15), (8192 - 4115, -41.15), (8192 + 4095, 40.95), (8192 - 4096, -40.96)])
+def test_lateral_is_14bit_offset_binary(y14, meters):
+  # a 13-bit two's complement decode reads 12307 as -40.77 m; bit 77 carries the sign past +-40.96 m
+  from opendbc.car.honda.bosch_c_radar import unpack
+  f = frame(OBJECT_IDS[0], y14=y14)
+  assert CandidateCalibration(.05, 0, -4.296, .01, .1, 1539).convert(unpack(f.address, f.dat))[1] == pytest.approx(meters)
+
+
+def test_far_lateral_object_does_not_wrap_into_the_path():
+  # +72 m lateral would read as -9.92 m under a 13-bit decode, inside the |y| < 20 m publication guard
+  calibrated = BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CandidateCalibration(.05, 0, -4.296, .01, .1, 1539),
+                                    clock=lambda: 300_000_000)
+  frames = [frame(address, 0, wire=1 if slot == 0 else 0, y14=8192 + 7200) for slot, address in enumerate(OBJECT_IDS)]
+  result = calibrated.update([(0, frames)])
+  assert not result.points and calibrated.guard_rejected == 1
 
 
 @pytest.mark.parametrize('bus', [0, 2, 129])

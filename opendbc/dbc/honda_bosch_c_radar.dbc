@@ -44,7 +44,7 @@ BO_ 98 BOSCH_C_OBJECT_00: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -89,7 +89,7 @@ BO_ 100 BOSCH_C_OBJECT_01: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -134,7 +134,7 @@ BO_ 102 BOSCH_C_OBJECT_02: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -179,7 +179,7 @@ BO_ 104 BOSCH_C_OBJECT_03: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -224,7 +224,7 @@ BO_ 106 BOSCH_C_OBJECT_04: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -269,7 +269,7 @@ BO_ 108 BOSCH_C_OBJECT_05: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -314,7 +314,7 @@ BO_ 110 BOSCH_C_OBJECT_06: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -359,7 +359,7 @@ BO_ 112 BOSCH_C_OBJECT_07: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -404,7 +404,7 @@ BO_ 114 BOSCH_C_OBJECT_08: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -449,7 +449,7 @@ BO_ 116 BOSCH_C_OBJECT_09: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -494,7 +494,7 @@ BO_ 118 BOSCH_C_OBJECT_10: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -539,7 +539,7 @@ BO_ 120 BOSCH_C_OBJECT_11: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -584,7 +584,7 @@ BO_ 122 BOSCH_C_OBJECT_12: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -629,7 +629,7 @@ BO_ 124 BOSCH_C_OBJECT_13: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -674,7 +674,7 @@ BO_ 126 BOSCH_C_OBJECT_14: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -719,7 +719,7 @@ BO_ 128 BOSCH_C_OBJECT_15: 64 UNKNOWN
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
- SG_ YREL : 64|13@1- (0.01,0) [-40.96|40.95] "m" LOGGER
+ SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
  SG_ AZIMUTH_CENTER : 411|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ AZIMUTH_EDGE_A : 424|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
@@ -734,8 +734,8 @@ CM_ SG_ 98 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwee
 CM_ SG_ 98 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 98 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 98 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 98 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 98 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 98 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 98 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 98 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 98 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 98 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -769,8 +769,8 @@ CM_ SG_ 100 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 100 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 100 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 100 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 100 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 100 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 100 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 100 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 100 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 100 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 100 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -804,8 +804,8 @@ CM_ SG_ 102 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 102 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 102 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 102 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 102 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 102 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 102 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 102 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 102 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 102 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 102 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -839,8 +839,8 @@ CM_ SG_ 104 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 104 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 104 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 104 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 104 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 104 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 104 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 104 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 104 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 104 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 104 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -874,8 +874,8 @@ CM_ SG_ 106 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 106 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 106 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 106 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 106 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 106 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 106 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 106 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 106 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 106 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 106 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -909,8 +909,8 @@ CM_ SG_ 108 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 108 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 108 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 108 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 108 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 108 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 108 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 108 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 108 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 108 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 108 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -944,8 +944,8 @@ CM_ SG_ 110 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 110 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 110 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 110 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 110 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 110 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 110 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 110 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 110 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 110 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 110 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -979,8 +979,8 @@ CM_ SG_ 112 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 112 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 112 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 112 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 112 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 112 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 112 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 112 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 112 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 112 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 112 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1014,8 +1014,8 @@ CM_ SG_ 114 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 114 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 114 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 114 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 114 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 114 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 114 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 114 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 114 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 114 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 114 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1049,8 +1049,8 @@ CM_ SG_ 116 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 116 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 116 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 116 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 116 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 116 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 116 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 116 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 116 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 116 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 116 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1084,8 +1084,8 @@ CM_ SG_ 118 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 118 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 118 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 118 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 118 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 118 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 118 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 118 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 118 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 118 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 118 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1119,8 +1119,8 @@ CM_ SG_ 120 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 120 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 120 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 120 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 120 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 120 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 120 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 120 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 120 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 120 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 120 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1154,8 +1154,8 @@ CM_ SG_ 122 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 122 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 122 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 122 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 122 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 122 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 122 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 122 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 122 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 122 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 122 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1189,8 +1189,8 @@ CM_ SG_ 124 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 124 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 124 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 124 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 124 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 124 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 124 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 124 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 124 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 124 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 124 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1224,8 +1224,8 @@ CM_ SG_ 126 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 126 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 126 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 126 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 126 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 126 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 126 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 126 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 126 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 126 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 126 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1259,8 +1259,8 @@ CM_ SG_ 128 OBJECT_ID_RAW "Observed 0 empty, 1 through 63 active. IDs move betwe
 CM_ SG_ 128 LIFECYCLE_RAW "Observed +3 modulo 4096 per consecutive sweep for continuing IDs. Resets or discontinuities require a new track.";
 CM_ SG_ 128 POSITION_X_RAW "Unsigned 12-bit, bits 48-59 (accepted 2026-09-28 on held-out routes; bit 60 belongs to OBJECT_CLASS_RAW). Working decode dRel = 0.05*raw-4.296 m (accepted). The stock dash draws HUD_OBJECTS LONG_DIST from raw/4. Normalized closing and azimuth both imply a sensor range origin about 2.3 m behind the dRel origin.";
 CM_ SG_ 128 OBJECT_CLASS_RAW "Object class, bits 60-63. 1 car and 3 truck/large vehicle: accepted against the stock dash HUD_OBJECTS icons on held-out routes (99.6% and 99.2%). 6 motorcycle (dash icon 6), 7 pedestrian and 8 bicycle: provisional; 9-11 unconfirmed small objects. Families (1, 3) and -5 never mix within a track.";
-CM_ SG_ 128 POSITION_Y_RAW "Signed 13-bit two-complement, positive left. Working decode 0.01 m/count (accepted 2026-09-28; gyro, camera and azimuth-field consistency). 8191 encodes -1 and is not an invalid sentinel.";
-CM_ SG_ 128 Y_COMPANION_RAW "Three separate fields. Bit 77: set when Y >= 0 (inverse of Y sign bit 76 on 99.3-100%), redundant. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
+CM_ SG_ 128 POSITION_Y_RAW "Low 13 bits of the 14-bit offset-binary lateral position (bits 64-77), positive left: Y = 0.01*(bits 64-77 - 8192) m (0.01 m/count accepted 2026-09-28; 14-bit extent accepted 2026-09-29 on held-out routes). Within +-40.95 m this equals the signed 13-bit value. 8191 with bit 77 clear encodes -1 and is not an invalid sentinel.";
+CM_ SG_ 128 Y_COMPANION_RAW "Three separate fields. Bit 77: top bit of the 14-bit offset-binary lateral position; it is the inverse of bit 76 within +-40.95 m and carries the sign beyond it. Bits 78-79: life state 0 newborn, 1 established, 2 ending (2 on 6-26% of a track last three frames vs 0.1-4% mid-life, ten recordings).";
 CM_ SG_ 128 VELOCITY_CANDIDATE_RAW "Working decode vRel = 0.1*(raw-1539) m/s (accepted). Raw 0 (-153.9 m/s) is a floor saturation seen on newborn far objects, not a sentinel.";
 CM_ SG_ 128 LATERAL_VELOCITY_CANDIDATE_RAW "Lateral velocity 0.1*(raw-511) m/s, positive left, relative in the sensor frame (includes the apparent motion of stationary objects from ego yaw). Provisional 2026-09-28: local Y slope and gyro kinematics on held-out recordings, zero 510-511 on stationary scenes; one held-out bracket (0.1004-0.1085) misses 0.1.";
 CM_ SG_ 128 NORMALIZED_RATE_CANDIDATE_RAW "Bosch A NORMALIZED_CLOSING counterpart (provisional). 0.001*(raw-40000) 1/s, approximately vRel/(dRel+2.3 m); follows Doppler vRel, not range change. 64999 = invalid, with TTC 0, TTC sigma 0 and normalized-closing sigma 0 in the same frame.";
@@ -1289,112 +1289,112 @@ CM_ SG_ 128 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature s
 CM_ SG_ 128 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
 CM_ SG_ 128 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 CM_ SG_ 98 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 98 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 98 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 98 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 98 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 98 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 98 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 98 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 100 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 100 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 100 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 100 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 100 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 100 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 100 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 100 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 102 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 102 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 102 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 102 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 102 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 102 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 102 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 102 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 104 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 104 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 104 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 104 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 104 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 104 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 104 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 104 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 106 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 106 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 106 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 106 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 106 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 106 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 106 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 106 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 108 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 108 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 108 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 108 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 108 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 108 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 108 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 108 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 110 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 110 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 110 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 110 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 110 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 110 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 110 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 110 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 112 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 112 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 112 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 112 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 112 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 112 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 112 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 112 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 114 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 114 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 114 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 114 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 114 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 114 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 114 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 114 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 116 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 116 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 116 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 116 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 116 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 116 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 116 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 116 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 118 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 118 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 118 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 118 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 118 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 118 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 118 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 118 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 120 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 120 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 120 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 120 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 120 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 120 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 120 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 120 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 122 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 122 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 122 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 122 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 122 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 122 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 122 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 122 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 124 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 124 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 124 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 124 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 124 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 124 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 124 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 124 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 126 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 126 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 126 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 126 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 126 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 126 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
 CM_ SG_ 126 AZIMUTH_EDGE_B "Accepted: right edge, same encoding as AZIMUTH_CENTER. Clips at -1 rad.";
 CM_ SG_ 126 TTC "Accepted: (raw-1024)/128 s constant-velocity TTC. Raw 2046 (7.98 s) = not reported, raw 0 = invalid; see TTC_CANDIDATE_RAW.";
 CM_ SG_ 128 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
-CM_ SG_ 128 YREL "Accepted working decode 0.01 m per count, signed 13-bit, positive left.";
+CM_ SG_ 128 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 128 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";
 CM_ SG_ 128 AZIMUTH_CENTER "Accepted: 2^-12 rad per count, zero at raw 4096, positive left.";
 CM_ SG_ 128 AZIMUTH_EDGE_A "Accepted: left edge, same encoding as AZIMUTH_CENTER. Clips at +1 rad.";
