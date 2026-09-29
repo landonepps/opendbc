@@ -385,6 +385,7 @@ def test_shipped_dbc_ego_motion_fields():
     assert dbc['SPEED_CANDIDATE_RAW'] == (payload[3] << 2) | (payload[4] >> 6)
     assert dbc['STEER_ANGLE_CANDIDATE_RAW'] == signed((value >> 103) & 511, 9)
     assert dbc['ACCEL_CANDIDATE_RAW'] == signed(payload[11], 8)
+    assert dbc['LAT_ACCEL'] == pytest.approx(signed(payload[10], 8) * 0.198)
 
 
 def status_x(raw12, status):

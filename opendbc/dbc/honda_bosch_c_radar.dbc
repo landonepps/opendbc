@@ -744,6 +744,7 @@ BO_ 128 BOSCH_C_OBJECT_15: 64 UNKNOWN
 
 BO_ 1025 BOSCH_C_EGO_MOTION: 64 UNKNOWN
  SG_ YAW_RATE : 366|12@0- (0.0005257,0) [-1.0766336|1.0761079] "rad/s" LOGGER
+ SG_ LAT_ACCEL : 80|8@1- (0.198,0) [-25.344|25.146] "m/s^2" LOGGER
  SG_ SPEED_CANDIDATE_RAW : 31|10@0+ (1,0) [0|1023] "" LOGGER
  SG_ STEER_ANGLE_CANDIDATE_RAW : 103|9@1- (1,0) [-256|255] "" LOGGER
  SG_ ACCEL_CANDIDATE_RAW : 88|8@1- (1,0) [-128|127] "" LOGGER
@@ -1329,6 +1330,7 @@ CM_ SG_ 128 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBAB
 BA_ "VFrameFormat" BO_ 1025 14;
 CM_ BO_ 1025 "On the private camera-radar bus (bus 1), 50 Hz, sender not identified. Carries ego motion under stock longitudinal control; the fields read 0 under openpilot longitudinal (all 9 alpha routes).";
 CM_ SG_ 1025 YAW_RATE "Accepted 2026-09-29: matches the calibrated gyro yaw rate within 0.004 rad/s median with r >= 0.99 on 48 of 50 held-out stock routes. Positive left. Byte 45 bits 6-0 then byte 46 bits 7-3.";
+CM_ SG_ 1025 LAT_ACCEL "Accepted 2026-09-29: lateral acceleration, positive left, about 0.02 g per count; matches vEgo x calibrated yaw rate within 0.15 m/s^2 median with r >= 0.95 on 49 of 50 held-out stock routes. Byte 10.";
 CM_ SG_ 1025 SPEED_CANDIDATE_RAW "Ego speed, provisional: 0.0683*raw+0.054 m/s against vEgo (median error 0.07 m/s; passes on 59 of 59 held-out stock routes; the held-out rule failed only on alpha routes, where it reads 0). Byte 3 then byte 4 bits 7-6.";
 CM_ SG_ 1025 STEER_ANGLE_CANDIDATE_RAW "Steering angle, provisional: raw is positive right; -2.008*raw+0.3 gives carState steeringAngleDeg in deg (positive left), median error about 1 deg; passes on 59 of 59 held-out stock routes.";
 CM_ SG_ 1025 ACCEL_CANDIDATE_RAW "Longitudinal acceleration, provisional: -0.1896*raw m/s^2 against carState aEgo, median error 0.08 m/s^2; passes on 59 of 59 held-out stock routes.";
