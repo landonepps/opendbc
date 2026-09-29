@@ -325,7 +325,7 @@ def test_shipped_dbc_matches_adapter_decode():
   from opendbc.car.honda.bosch_c_radar_live import PROVISIONAL_CALIBRATION
 
   names = dict(wire_id='OBJECT_ID_RAW', frame_counter='FRAME_COUNTER_RAW', frame_phase='FRAME_PHASE_RAW',
-               lifecycle='LIFECYCLE_RAW', x_raw='POSITION_X_RAW', x_companion_raw='X_COMPANION_RAW', y_raw='POSITION_Y_RAW',
+               lifecycle='LIFECYCLE_RAW', range_raw='POSITION_X_RAW', status='OBJECT_CLASS_RAW', y_raw='POSITION_Y_RAW',
                y_companion_raw='Y_COMPANION_RAW', velocity_raw='VELOCITY_CANDIDATE_RAW', quality_container_raw='QUALITY_CONTAINER_RAW',
                lateral_velocity_candidate_raw='LATERAL_VELOCITY_CANDIDATE_RAW',
                normalized_rate_candidate_raw='NORMALIZED_RATE_CANDIDATE_RAW',
@@ -341,6 +341,7 @@ def test_shipped_dbc_matches_adapter_decode():
       x, y, v = PROVISIONAL_CALIBRATION.convert(raw)
       assert (dbc['DREL'], dbc['YREL'], dbc['VREL']) == pytest.approx((x, y, v))
       angles = int.from_bytes(payload, 'little')
+      assert dbc['TTC'] == pytest.approx(((angles >> 201) & 2047) / 128 - 8)
       for start, name in ((411, 'AZIMUTH_CENTER'), (424, 'AZIMUTH_EDGE_A'), (440, 'AZIMUTH_EDGE_B')):
         assert dbc[name] == pytest.approx(((angles >> start) & 8191) / 4096 - 1)
 

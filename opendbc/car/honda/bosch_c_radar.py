@@ -107,14 +107,11 @@ class CandidateCalibration:
       raise ValueError('Calibration scales must be positive')
 
   def convert(self, raw):
-    return ((raw.x_raw - self.x_zero) * self.x_scale + self.x_reference_offset,
+    # Range is 48:12. x_zero stays expressed on the historical 48:13 window, whose top bit (status bit 60) is set for
+    # every status-1 object, so status-1 results are unchanged; other classes (e.g. motorcycles) now decode correctly.
+    return ((raw.range_raw + 4096 - self.x_zero) * self.x_scale + self.x_reference_offset,
             raw.signed_y_raw * self.y_scale,
             (raw.velocity_raw - self.velocity_zero) * self.velocity_scale)
-
-  def range_m(self, raw):
-    # x_zero is expressed on the 48:13 window. With status bit 60 set (every status-1 object) this equals
-    # convert()'s x; with it clear (e.g. motorcycles) only this 12-bit form is correct.
-    return (raw.range_raw + 4096 - self.x_zero) * self.x_scale + self.x_reference_offset
 
 
 DISPLAY_STATUSES = (1, 3, 6)  # cars, trucks, motorcycles; never pedestrians or bicycles
@@ -302,9 +299,10 @@ class BoschCRadarInterface(RadarInterfaceBase):
     for track in self.decoder.tracks.values():
       raw = track.raw
       x, y, v = self.calibration.convert(raw)
-      # Preserve the offline empirical display guard. This is NOT a recovered
-      # validity rule, and quality-container values never gate the baseline.
-      if not (raw.x_companion_raw == 0 and 0 < x < 160 and abs(y) < 20 and abs(v) < 90):
+      # Publish cars only (status 1; identical to the former "companion bits 61-63 == 0 and x > 0" guard).
+      # Plausibility bounds are the offline empirical guard, not a recovered validity rule; quality-container
+      # values never gate the baseline.
+      if not (raw.status == 1 and 0 < x < 160 and abs(y) < 20 and abs(v) < 90):
         self.guard_rejected += 1
         continue
       points.append(dict(trackId=track.track_id, dRel=x, yRel=y, vRel=v))
@@ -323,8 +321,7 @@ class BoschCRadarInterface(RadarInterfaceBase):
       raw = track.raw
       if raw.status not in DISPLAY_STATUSES or now is None or now - track.time_ns > STALE_NS:
         continue
-      x = self.calibration.range_m(raw)
-      _, y, v = self.calibration.convert(raw)
+      x, y, v = self.calibration.convert(raw)
       if 0 < x < 160 and abs(y) < 20 and abs(v) < 90:
         out.append(DisplayObject(track.track_id, x, y, v, raw.status))
     return out
