@@ -8,8 +8,8 @@ new logic. Display only; nothing here affects control.
 from opendbc.car.honda import bosch_c_radar_live, lane_path
 from opendbc.car.honda.hud_objects import LAT_SCALE, MAX_OBJECT_ID, NUM_SLOTS, HudObject, lead_rotation
 
-# Radar status -> dash CAR_TYPE. 7 and -7 are the dash's car and truck icons. 6 is the icon the stock radar
-# draws for its status-6 objects (motorcycles), from the recorded HUD_OBJECTS cross-check.
+# Radar status -> dash CAR_TYPE. 7 and -7 are the dash's car and truck icons. 6 is the motorcycle icon, which the
+# stock dash draws for moving status-6 objects. Status 6 is often a car on video, so here it is a debugging aid.
 CAR_TYPE_BY_STATUS = {1: 7, 3: -7, 6: 6}
 MAX_LATERAL_M = 5.5   # the ego lane and one lane either side
 MAX_DISTANCE_M = 120.0

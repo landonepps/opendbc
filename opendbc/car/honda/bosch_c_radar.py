@@ -53,7 +53,7 @@ class RawObject:
   frame_phase: int
   lifecycle: int
   range_raw: int  # bits 48-59
-  status: int     # bits 60-63: object class. 1 car, 3 truck, 6 motorcycle, 7 pedestrian, 8 bicycle
+  status: int     # bits 60-63: object class. 1 car, 3 truck; 6-11 are not reliably one object type (see the DBC)
   y_raw: int            # bits 64-76; bit 77 (the low bit of y_companion_raw) is the top bit of the lateral
   y_companion_raw: int  # bits 77-79
   velocity_raw: int
@@ -104,7 +104,8 @@ class CandidateCalibration:
             (raw.velocity_raw - self.velocity_zero) * self.velocity_scale)
 
 
-DISPLAY_STATUSES = (1, 3, 6)  # cars, trucks, motorcycles; never pedestrians or bicycles
+# 1 car, 3 truck. 6 keeps the motorcycle icon as a debugging aid: on video it is often a car (see the DBC)
+DISPLAY_STATUSES = (1, 3, 6)
 
 
 @dataclass(frozen=True)
@@ -302,7 +303,7 @@ class BoschCRadarInterface(RadarInterfaceBase):
     return structs.RadarData.new_message(points=points, errors={'radarUnavailableTemporary': stale})
 
   def display_objects(self, now_ns: int | None = None):
-    """Current vehicles for the dash, including the classes the RadarData guard withholds (trucks, motorcycles).
+    """Current vehicles for the dash, including the classes the RadarData guard withholds (3 and 6).
     Display only: nothing here reaches RadarData."""
     now = now_ns if now_ns is not None else self.decoder.now_ns
     out = []
