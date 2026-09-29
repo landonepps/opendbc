@@ -66,6 +66,17 @@ class RawObject:
   def signed_y_raw(self):
     return self.y_raw - 8192 if self.y_raw & 4096 else self.y_raw
 
+  @property
+  def range_raw(self):
+    # Range is 48:12; bit 60 (the top bit of the 48:13 window) belongs to the status field below.
+    return self.x_raw & 0xFFF
+
+  @property
+  def status(self):
+    # Bits 60-63: object class. 1 car, 3 truck, 6 motorcycle, 7 pedestrian, 8 bicycle (research:
+    # bosch-c-research docs/status-nibble-meaning.md; cars and trucks confirmed against the dash icons).
+    return ((self.x_raw >> 12) & 1) | (self.x_companion_raw << 1)
+
 
 def unpack(address: int, payload: bytes) -> RawObject:
   if address not in OBJECT_IDS or len(payload) != 64:
@@ -99,6 +110,23 @@ class CandidateCalibration:
     return ((raw.x_raw - self.x_zero) * self.x_scale + self.x_reference_offset,
             raw.signed_y_raw * self.y_scale,
             (raw.velocity_raw - self.velocity_zero) * self.velocity_scale)
+
+  def range_m(self, raw):
+    # x_zero is expressed on the 48:13 window. With status bit 60 set (every status-1 object) this equals
+    # convert()'s x; with it clear (e.g. motorcycles) only this 12-bit form is correct.
+    return (raw.range_raw + 4096 - self.x_zero) * self.x_scale + self.x_reference_offset
+
+
+DISPLAY_STATUSES = (1, 3, 6)  # cars, trucks, motorcycles; never pedestrians or bicycles
+
+
+@dataclass(frozen=True)
+class DisplayObject:
+  track_id: int
+  d_rel: float
+  y_rel: float
+  v_rel: float
+  status: int
 
 
 @dataclass
@@ -285,6 +313,21 @@ class BoschCRadarInterface(RadarInterfaceBase):
     # (soft disable), not canError (immediate disable).
     stale = self.decoder.last_bank_ns is None or now_nanos - self.decoder.last_bank_ns > STALE_NS
     return structs.RadarData.new_message(points=points, errors={'radarUnavailableTemporary': stale})
+
+  def display_objects(self, now_ns: int | None = None):
+    """Current vehicles for the dash, including the classes the RadarData guard withholds (trucks, motorcycles).
+    Display only: nothing here reaches RadarData."""
+    now = now_ns if now_ns is not None else self.decoder.now_ns
+    out = []
+    for track in self.decoder.tracks.values():
+      raw = track.raw
+      if raw.status not in DISPLAY_STATUSES or now is None or now - track.time_ns > STALE_NS:
+        continue
+      x = self.calibration.range_m(raw)
+      _, y, v = self.calibration.convert(raw)
+      if 0 < x < 160 and abs(y) < 20 and abs(v) < 90:
+        out.append(DisplayObject(track.track_id, x, y, v, raw.status))
+    return out
 
   def update(self, can_packets: list[tuple[int, list[CanData]]], *, now_nanos: int | None = None):
     # Validate the entire batch before mutating state. Preserve frame ordering

@@ -14,6 +14,7 @@ from opendbc.car.interfaces import CarControllerBase
 from opendbc.car.common.pid import PIDController
 from opendbc.car.honda import lane_path
 from opendbc.car.honda import hud_objects
+from opendbc.car.honda.bosch_c_hud import BoschCHud
 
 from opendbc.sunnypilot.car.honda.mads import MadsCarController
 from opendbc.sunnypilot.car.honda.gas_interceptor import GasInterceptorCarController
@@ -215,6 +216,8 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
     self.lane_path_msg = "LANE_PATH_ALT" if radarless_hud_addr else "LANE_PATH"
     self.hud_objects_msg = "HUD_OBJECTS_ALT" if radarless_hud_addr else "HUD_OBJECTS"
     self.radar_lead_msg = "RADAR_LEAD_ALT" if radarless_hud_addr else "RADAR_LEAD"
+    # experimental Bosch C radar: show its decoded vehicles, with their radar-reported class icons, on the dash
+    self.bosch_c_hud = BoschCHud() if CP_SP.flags & HondaFlagsSP.EXPERIMENTAL_BOSCH_C_RADAR else None
     self.dash_lane = lane_path.DashLane([lane_path.OFFSET_UNAVAILABLE] * lane_path.NUM_PTS, 0.0, False, False)
     self.lkas_hud_key = None
     self.lkas_state_change_frames = 0
@@ -1172,6 +1175,8 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       # CAN FD cars have no camera HUD_OBJECTS to poll (the disabled radar owned it), so there are no
       # secondary vehicle locations: author OP's lead in slot 0 with the other slots blank (tracks=None).
       tracks = CS.hud_object_tracker.snapshot() if CS.hud_object_tracker is not None else None
+      if tracks is None and self.bosch_c_hud is not None:
+        tracks = self.bosch_c_hud.tracks(lead)
       if self.CP.openpilotLongitudinalControl:
         # For OP long, replace lead car and forward rest of objects
         hud_msg = self.hud_object_author.create(self.packer, self.CAN.lkas, lead, tracks, mux, now_nanos * 1e-9,

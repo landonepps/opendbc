@@ -6,6 +6,8 @@ and azimuth-field consistency; previously 1/128). None is a recovered firmware
 constant. This module sends no CAN and changes no safety, silencing,
 fusion or controller algorithms. Activation is read at startup.
 """
+import time
+
 from opendbc.car import structs
 from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalibration, STALE_NS
 from opendbc.car.honda.hondacan import CanBus
@@ -65,4 +67,24 @@ class BoschCLiveRadarInterface(BoschCRadarInterface):
     if result is not None:
       fresh_ids = {t.track_id for t in self.decoder.tracks.values() if now - t.time_ns <= STALE_NS}
       result.points = [p.to_dict() for p in result.points if p.trackId in fresh_ids]
+      publish_display(self.display_objects(now))
     return result
+
+
+# The dash author (carcontroller, same card process) reads the latest decoded vehicles from here. Display only.
+DISPLAY_MAX_AGE_S = 0.3
+_display: tuple[float, list] | None = None
+
+
+def publish_display(objects, now_s: float | None = None):
+  global _display
+  _display = (time.monotonic() if now_s is None else now_s, objects)
+
+
+def latest_display(now_s: float | None = None):
+  """Latest decoded vehicles, or None when the live radar isn't publishing (then the dash keeps model leads)."""
+  if _display is None:
+    return None
+  stamp, objects = _display
+  now = time.monotonic() if now_s is None else now_s
+  return objects if now - stamp <= DISPLAY_MAX_AGE_S else None

@@ -343,3 +343,21 @@ def test_shipped_dbc_matches_adapter_decode():
       angles = int.from_bytes(payload, 'little')
       for start, name in ((411, 'AZIMUTH_CENTER'), (424, 'AZIMUTH_EDGE_A'), (440, 'AZIMUTH_EDGE_B')):
         assert dbc[name] == pytest.approx(((angles >> start) & 8191) / 4096 - 1)
+
+
+def status_x(raw12, status):
+  # 48:12 range plus the 60:4 status field, laid out as the 16 bits from bit 48
+  return raw12 | (status << 12)
+
+
+def test_status_and_12bit_range_for_display(adapter):
+  # car (status 1), motorcycle (6, bit 60 clear) and pedestrian (7); only the car passes the RadarData guard
+  objs = {0: (1, status_x(600, 1)), 1: (2, status_x(700, 6)), 2: (3, status_x(500, 7))}
+  frames = [frame(address, 0, wire=objs[slot][0] if slot in objs else 0, x=objs[slot][1] if slot in objs else 4700)
+            for slot, address in enumerate(OBJECT_IDS)]
+  result = adapter.update([(0, frames)])
+  statuses = {t.raw.wire_id: t.raw.status for t in adapter.decoder.tracks.values()}
+  assert statuses == {1: 1, 2: 6, 3: 7}
+  assert [p.dRel for p in result.points] == [pytest.approx(600 * .05 - 4.296)]
+  shown = {o.status: o.d_rel for o in adapter.display_objects()}
+  assert shown == {1: pytest.approx(600 * .05 - 4.296), 6: pytest.approx(700 * .05 - 4.296)}
