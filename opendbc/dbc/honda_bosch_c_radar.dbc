@@ -43,6 +43,7 @@ BO_ 98 BOSCH_C_OBJECT_00: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -88,6 +89,7 @@ BO_ 100 BOSCH_C_OBJECT_01: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -133,6 +135,7 @@ BO_ 102 BOSCH_C_OBJECT_02: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -178,6 +181,7 @@ BO_ 104 BOSCH_C_OBJECT_03: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -223,6 +227,7 @@ BO_ 106 BOSCH_C_OBJECT_04: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -268,6 +273,7 @@ BO_ 108 BOSCH_C_OBJECT_05: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -313,6 +319,7 @@ BO_ 110 BOSCH_C_OBJECT_06: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -358,6 +365,7 @@ BO_ 112 BOSCH_C_OBJECT_07: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -403,6 +411,7 @@ BO_ 114 BOSCH_C_OBJECT_08: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -448,6 +457,7 @@ BO_ 116 BOSCH_C_OBJECT_09: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -493,6 +503,7 @@ BO_ 118 BOSCH_C_OBJECT_10: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -538,6 +549,7 @@ BO_ 120 BOSCH_C_OBJECT_11: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -583,6 +595,7 @@ BO_ 122 BOSCH_C_OBJECT_12: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -628,6 +641,7 @@ BO_ 124 BOSCH_C_OBJECT_13: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -673,6 +687,7 @@ BO_ 126 BOSCH_C_OBJECT_14: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -718,6 +733,7 @@ BO_ 128 BOSCH_C_OBJECT_15: 64 UNKNOWN
  SG_ FLAG_107_CANDIDATE_RAW : 107|1@1+ (1,0) [0|1] "" LOGGER
  SG_ ENUM_109_CANDIDATE_RAW : 109|3@1+ (1,0) [0|7] "" LOGGER
  SG_ EXISTENCE_PROBABILITY_CANDIDATE_RAW : 121|6@1+ (1,0) [0|63] "" LOGGER
+ SG_ ANGULAR_WIDTH_480_RAW : 480|8@1+ (1,0) [0|255] "" LOGGER
  SG_ DREL : 48|12@1+ (0.05,-4.296) [-4.296|200.454] "m" LOGGER
  SG_ YREL : 64|14@1+ (0.01,-81.92) [-81.92|81.91] "m" LOGGER
  SG_ VREL : 80|11@1+ (0.1,-153.9) [-153.9|50.8] "m/s" LOGGER
@@ -768,6 +784,7 @@ CM_ SG_ 98 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 99
 CM_ SG_ 98 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 98 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 98 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 98 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 98 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 100 14;
 CM_ SG_ 100 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fac.";
@@ -803,6 +820,7 @@ CM_ SG_ 100 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 100 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 100 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 100 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 100 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 100 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 102 14;
 CM_ SG_ 102 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fad.";
@@ -838,6 +856,7 @@ CM_ SG_ 102 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 102 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 102 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 102 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 102 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 102 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 104 14;
 CM_ SG_ 104 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fae.";
@@ -873,6 +892,7 @@ CM_ SG_ 104 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 104 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 104 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 104 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 104 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 104 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 106 14;
 CM_ SG_ 106 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0faf.";
@@ -908,6 +928,7 @@ CM_ SG_ 106 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 106 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 106 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 106 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 106 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 106 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 108 14;
 CM_ SG_ 108 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb0.";
@@ -943,6 +964,7 @@ CM_ SG_ 108 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 108 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 108 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 108 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 108 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 108 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 110 14;
 CM_ SG_ 110 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb1.";
@@ -978,6 +1000,7 @@ CM_ SG_ 110 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 110 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 110 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 110 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 110 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 110 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 112 14;
 CM_ SG_ 112 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb2.";
@@ -1013,6 +1036,7 @@ CM_ SG_ 112 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 112 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 112 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 112 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 112 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 112 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 114 14;
 CM_ SG_ 114 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb3.";
@@ -1048,6 +1072,7 @@ CM_ SG_ 114 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 114 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 114 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 114 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 114 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 114 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 116 14;
 CM_ SG_ 116 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb4.";
@@ -1083,6 +1108,7 @@ CM_ SG_ 116 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 116 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 116 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 116 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 116 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 116 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 118 14;
 CM_ SG_ 118 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb5.";
@@ -1118,6 +1144,7 @@ CM_ SG_ 118 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 118 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 118 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 118 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 118 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 118 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 120 14;
 CM_ SG_ 120 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb6.";
@@ -1153,6 +1180,7 @@ CM_ SG_ 120 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 120 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 120 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 120 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 120 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 120 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 122 14;
 CM_ SG_ 122 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb7.";
@@ -1188,6 +1216,7 @@ CM_ SG_ 122 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 122 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 122 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 122 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 122 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 122 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 124 14;
 CM_ SG_ 124 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb8.";
@@ -1223,6 +1252,7 @@ CM_ SG_ 124 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 124 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 124 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 124 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 124 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 124 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 126 14;
 CM_ SG_ 126 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fb9.";
@@ -1258,6 +1288,7 @@ CM_ SG_ 126 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 126 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 126 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 126 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 126 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 126 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 128 14;
 CM_ SG_ 128 CRC16_RAW "Capture-verified CRC16: polynomial 0x1021, init 0xFFFF, no reflection or xorout; bytes 2:64 then little-endian data ID 0x0fba.";
@@ -1293,6 +1324,7 @@ CM_ SG_ 128 ANGULAR_WIDTH_COARSE_COPY_CANDIDATE_RAW "Byte 61 equals byte 59 on 9
 CM_ SG_ 128 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99% after 1 s; agrees with Y_COMPANION bit 78 on 96%. Meaning unresolved.";
 CM_ SG_ 128 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 128 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
+CM_ SG_ 128 ANGULAR_WIDTH_480_RAW "Angular-width measure, raw units (accepted 2026-09-29 on held-out routes): follows the azimuth-edge width (Spearman >= 0.8) and scales as about 1/range within tracks on 57 of 60 routes. 0 while AUX2_378 holds its default.";
 CM_ SG_ 128 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
 BA_ "VFrameFormat" BO_ 1025 14;
 CM_ BO_ 1025 "On the private camera-radar bus (bus 1), 50 Hz, sender not identified. Carries ego motion under stock longitudinal control; the fields read 0 under openpilot longitudinal (all 9 alpha routes).";
