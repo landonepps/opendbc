@@ -726,6 +726,12 @@ BO_ 128 BOSCH_C_OBJECT_15: 64 UNKNOWN
  SG_ AZIMUTH_EDGE_B : 440|13@1+ (0.000244140625,-1) [-1|0.999755859375] "rad" LOGGER
  SG_ TTC : 201|11@1+ (0.0078125,-8) [-8|7.9921875] "s" LOGGER
 
+BO_ 1025 BOSCH_C_EGO_MOTION: 64 UNKNOWN
+ SG_ YAW_RATE : 366|12@0- (0.0005257,0) [-1.0766336|1.0761079] "rad/s" LOGGER
+ SG_ SPEED_CANDIDATE_RAW : 31|10@0+ (1,0) [0|1023] "" LOGGER
+ SG_ STEER_ANGLE_CANDIDATE_RAW : 103|9@1- (1,0) [-256|255] "" LOGGER
+ SG_ ACCEL_CANDIDATE_RAW : 88|8@1- (1,0) [-128|127] "" LOGGER
+
 CM_ "Receive-only schema for analysis tools. Message producer is not independently identified. Unknown bytes are deliberately omitted. Scaled signals are the accepted working conversions; *_CANDIDATE_RAW names are research hypotheses whose status is in each comment. The runtime adapter (opendbc/car/honda/bosch_c_radar.py) decodes these bits itself because it verifies the CRC and 16-message bank coherence. The accepted decodes read the same on radar firmware 8S302-3A0-A220 and 8S302-3A0-A230 (checked 2026-09-29).";
 BA_DEF_ BO_ "VFrameFormat" ENUM "StandardCAN","ExtendedCAN","reserved","J1939PG","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
 BA_ "VFrameFormat" BO_ 98 14;
@@ -1288,6 +1294,12 @@ CM_ SG_ 128 FLAG_106_CANDIDATE_RAW "Set on about 40% of newborn frames and 97-99
 CM_ SG_ 128 FLAG_107_CANDIDATE_RAW "Set on 0-3% of observations, mostly mature same-direction movers. Meaning unresolved.";
 CM_ SG_ 128 ENUM_109_CANDIDATE_RAW "Values 0-4. 1 on most established tracks; 2-4 mostly on same-direction movers near the path with high existence. Not an object class (metric width about 1.7 m for all values) and not a left/right lane code. Meaning unresolved.";
 CM_ SG_ 128 EXISTENCE_PROBABILITY_CANDIDATE_RAW "Bosch A OBJECT_EXISTENCE_PROBABILITY counterpart (accepted, raw units). 0-49 only, 49 most common. Best survival predictor within range x age strata on ten recordings (AUC 0.67-0.92); falls over the last second before track death; low on short-lived ghosts. 0 marks a degraded measurement (accepted on held-out routes: range innovation and vRel steps at least 2x worse on 17 of 17). Probability scale unresolved.";
+BA_ "VFrameFormat" BO_ 1025 14;
+CM_ BO_ 1025 "On the private camera-radar bus (bus 1), 50 Hz, sender not identified. Carries ego motion under stock longitudinal control; the fields read 0 under openpilot longitudinal (all 9 alpha routes).";
+CM_ SG_ 1025 YAW_RATE "Accepted 2026-09-29: matches the calibrated gyro yaw rate within 0.004 rad/s median with r >= 0.99 on 48 of 50 held-out stock routes. Positive left. Byte 45 bits 6-0 then byte 46 bits 7-3.";
+CM_ SG_ 1025 SPEED_CANDIDATE_RAW "Ego speed, provisional: 0.0683*raw+0.054 m/s against vEgo (median error 0.07 m/s; passes on 59 of 59 held-out stock routes; the held-out rule failed only on alpha routes, where it reads 0). Byte 3 then byte 4 bits 7-6.";
+CM_ SG_ 1025 STEER_ANGLE_CANDIDATE_RAW "Steering angle, provisional: raw is positive right; -2.008*raw+0.3 gives carState steeringAngleDeg in deg (positive left), median error about 1 deg; passes on 59 of 59 held-out stock routes.";
+CM_ SG_ 1025 ACCEL_CANDIDATE_RAW "Longitudinal acceleration, provisional: -0.1896*raw m/s^2 against carState aEgo, median error 0.08 m/s^2; passes on 59 of 59 held-out stock routes.";
 CM_ SG_ 98 DREL "Accepted working decode 0.05*raw-4.296 m from the 12-bit range, aligned to the HUD lead position (not the sensor origin, about 2.3 m further back).";
 CM_ SG_ 98 YREL "Accepted working decode 0.01*(raw-8192) m, 14-bit offset binary at bits 64-77, positive left. The earlier signed 13-bit decode wraps at +-40.96 m.";
 CM_ SG_ 98 VREL "Accepted working decode 0.1*(raw-1539) m/s. Raw 0 (-153.9 m/s) is a saturation on newborn far objects.";

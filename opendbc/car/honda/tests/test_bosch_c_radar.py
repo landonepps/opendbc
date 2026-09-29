@@ -366,6 +366,27 @@ def test_shipped_dbc_matches_adapter_decode():
         assert dbc[name] == pytest.approx(((angles >> start) & 8191) / 4096 - 1)
 
 
+def test_shipped_dbc_ego_motion_fields():
+  # 0x401 on the private camera-radar bus (research: bosch-c-research docs/bus1-ego-motion-0x401.md)
+  import random
+  from opendbc.can import CANParser
+
+  def signed(value, bits):
+    return value - (1 << bits) if value >= 1 << (bits - 1) else value
+
+  rng = random.Random(0)
+  parser = CANParser('honda_bosch_c_radar', [(0x401, 0)], 1)
+  for step in range(50):
+    payload = bytes(rng.getrandbits(8) for _ in range(64))
+    parser.update([(step, [(0x401, payload, 1)])])
+    dbc, value = parser.vl[0x401], int.from_bytes(payload, 'little')
+    # yaw rate: big-endian, byte 45 bits 6-0 then byte 46 bits 7-3
+    assert dbc['YAW_RATE'] == pytest.approx(signed(((payload[45] & 0x7F) << 5) | (payload[46] >> 3), 12) * 0.0005257)
+    assert dbc['SPEED_CANDIDATE_RAW'] == (payload[3] << 2) | (payload[4] >> 6)
+    assert dbc['STEER_ANGLE_CANDIDATE_RAW'] == signed((value >> 103) & 511, 9)
+    assert dbc['ACCEL_CANDIDATE_RAW'] == signed(payload[11], 8)
+
+
 def status_x(raw12, status):
   # 48:12 range plus the 60:4 status field, laid out as the 16 bits from bit 48
   return raw12 | (status << 12)
