@@ -175,6 +175,16 @@ class LeadSmoother:
     return self._d, self._y
 
 
+def dash_lateral(d_rel: float, y_rel: float, canfd: bool = False, dash_lane=None) -> tuple[float, float]:
+  """HUD_OBJECTS LAT_DIST (m, +left) for an object at model-frame distance d_rel and lateral y_rel (+left), and the
+  divisor that recovers its lateral for lead_rotation. Lane-snapped where the dash draws objects in lanes (the CR-V 6G,
+  lane_path.lane_position); otherwise LAT_SCALE, with the CAN FD lane-gain correction."""
+  if dash_lane is not None and dash_lane.scale is not None and dash_lane.scale.lane_width > 0:
+    return lane_path.lane_position(dash_lane, d_rel, y_rel)[1], 0.0
+  lat_scale = LAT_SCALE * (lane_path.curve_boost(d_rel) if canfd else 1.0)
+  return lat_scale * y_rel, lat_scale
+
+
 def lead_rotation(lateral_left_m: float) -> int:
   """Rotation from a lead's lateral offset. Used for OP's lead when camera isn't feeding a rotation (disengaged).
   Negative is rotating to left, positive is rotating to right.
@@ -279,7 +289,7 @@ class HudObjectAuthor:
     self._extra_smooth = {slot: LeadSmoother() for slot in EXTRA_LEAD_SLOTS}
     self._extra_emit = dict.fromkeys(EXTRA_LEAD_SLOTS, 0)   # emitted OBJECT_ID per extra slot
 
-  def _update_extras(self, extra_leads, lead, in_use, now):
+  def _update_extras(self, extra_leads, lead, in_use, now, dash_lane=None):
     """Per-tick state update for the extra leads; returns {slot: track-dict-or-None}. Extras must
     stay distinct from the primary lead and from each other, and their OBJECT_IDs must not collide
     with the primary's or one another's."""
@@ -301,11 +311,11 @@ class HudObjectAuthor:
           emit = emit % MAX_OBJECT_ID + 1
         self._extra_emit[slot] = emit
       in_use.add(emit)
-      lat_scale = LAT_SCALE * lane_path.curve_boost(ex.dRel)
-      d_rel, y_rel = self._extra_smooth[slot].update(ex.dRel, lat_scale * ex.yRel, ex.vRel, emit, now)
+      y_dash, lat_scale = dash_lateral(ex.dRel, ex.yRel, True, dash_lane)  # extras only render on CAN FD
+      d_rel, y_rel = self._extra_smooth[slot].update(ex.dRel, y_dash, ex.vRel, emit, now)
       rendered.append((ex.dRel, ex.yRel))
       out[slot] = {"d_rel": d_rel, "y_rel": y_rel, "object_id": emit, "is_lead_car": 0,
-                   "car_type": CAR_TYPE_CAR, "rotation": lead_rotation(y_rel / lat_scale)}
+                   "car_type": CAR_TYPE_CAR, "rotation": lead_rotation(y_rel / lat_scale if lat_scale else ex.yRel)}
     return out
 
   def _gate_lead(self, lead: ModelLead, now: float) -> ModelLead:
@@ -345,11 +355,14 @@ class HudObjectAuthor:
     self._prev_op_id = op_id
     return self._lead_id
 
-  def create(self, packer, bus, lead, tracks, mux: int, now: float, extra_leads=None, canfd: bool = False, name="HUD_OBJECTS"):
+  def create(self, packer, bus, lead, tracks, mux: int, now: float, extra_leads=None, canfd: bool = False, name="HUD_OBJECTS",
+             dash_lane=None):
     """`lead` = carControlSP.leadOne; `tracks` = the camera's HudObject snapshot (may be None); `mux` = the shared
     LANE_PATH/HUD_OBJECTS multiplexor for this frame. Returns one packed HUD_OBJECTS frame for the slot the mux lands
     on (OP's lead in slot 0, else a forwarded camera adjacent car — including in slot 0 when OP has no lead — else
-    inactive). re-ID + smoothing run every tick so their state stays continuous across the non-lead frames."""
+    inactive). re-ID + smoothing run every tick so their state stays continuous across the non-lead frames.
+    `dash_lane` = this tick's lane_path.DashLane; on a dash that draws objects in lanes, the lateral is placed in
+    them (dash_lateral)."""
     lead = self._gate_lead(lead, now)
     op_id = self._track_id.update(lead.status, lead.dRel, lead.vRel, now)
     stock_lead, in_use = None, set()
@@ -365,20 +378,20 @@ class HudObjectAuthor:
     if lead.status:
       in_use.add(lead_id)
 
-    # CAN FD only: scale the lateral by the lane-gain correction at the lead's distance so the marker
-    # tracks the lane rendering (LAT_SCALE was tuned against the radarless, flatter lane gain law)
-    lat_scale = LAT_SCALE * (lane_path.curve_boost(lead.dRel) if canfd else 1.0)
-    d_rel, y_rel = self._smoother.update(lead.dRel, lat_scale * lead.yRel, lead.vRel, lead_id, now)
+    # CAN FD: scale the lateral by the lane-gain correction at the lead's distance so the marker tracks the lane
+    # rendering (LAT_SCALE was tuned against the radarless, flatter lane gain law); lane-snapped on the CR-V 6G
+    y_dash, lat_scale = dash_lateral(lead.dRel, lead.yRel, canfd, dash_lane)
+    d_rel, y_rel = self._smoother.update(lead.dRel, y_dash, lead.vRel, lead_id, now)
 
     # extra distinct leadsV3 entries only render where the camera provides no cars to forward
-    extras = self._update_extras(extra_leads, lead, in_use, now) if tracks is None else {}
+    extras = self._update_extras(extra_leads, lead, in_use, now, dash_lane) if tracks is None else {}
 
     slot = (mux - 1) % 16
     if slot == 0 and lead.status:
       track = {"d_rel": d_rel, "y_rel": y_rel, "object_id": lead_id, "is_lead_car": 1,
                "car_type": stock_lead.car_type if stock_lead is not None else CAR_TYPE_CAR,
                # disengaged -> no camera rotation; calculate one from the lead's lateral
-               "rotation": stock_lead.rotation if stock_lead is not None else lead_rotation(y_rel / lat_scale)}
+               "rotation": stock_lead.rotation if stock_lead is not None else lead_rotation(y_rel / lat_scale if lat_scale else lead.yRel)}
     elif slot in extras:
       track = extras[slot]
     # forward slots 1-9 and slot 0 when not a lead

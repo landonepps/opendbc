@@ -40,6 +40,11 @@ GAIN_RADARLESS = 6.27 + 0.0106 * LOOKAHEAD + 0.000354 * LOOKAHEAD ** 2
 # than factory. Correlation with the model lateral rises 0.6 -> 0.96 with distance; the quadratic
 # below is the correlation-weighted fit of the per-index gains.
 GAIN_CANFD = 29.3 + 0.243 * LOOKAHEAD - 0.00228 * LOOKAHEAD ** 2
+# CR-V 6G: the same regression on its own radar's LANE_PATH_ALT under stock ACC (23 stock routes, 26,435 sweeps with the
+# dash drawing lanes and both model lines >= 0.5): about 4-5 raw/m near the car rising to 11 at 75 m, close to the
+# radarless law rather than the MDX one. Correlation with the model lateral rises 0.4 -> 0.94 with distance; the
+# quadratic below is the correlation-weighted fit of the per-index gains (bosch-c-research scripts/dash_hud_fit.py).
+GAIN_CRV6G = 3.828 + 0.0489 * LOOKAHEAD + 0.000750 * LOOKAHEAD ** 2
 
 def curve_boost(d: float) -> float:
   """CAN FD only: ratio of the stock-fit gain law to the radarless one at look-ahead distance d.
@@ -64,20 +69,21 @@ DASH_PATH_LEAD_FULL_DIST = 70.0  # m lead distance for full draw length
 DASH_PATH_MIN_REACH = 0.15       # min draw fraction (short stub when stopped / low speed)
 
 
-def _encode(lat, canfd: bool):
+def _encode(lat, gain):
   # lane-center lateral (m, +left) at each LOOKAHEAD -> raw offsets; stock offset = -OP lateral
-  gain = GAIN_CANFD if canfd else GAIN_RADARLESS
   raw = np.clip(np.round(-gain * np.asarray(lat, dtype=float)), -OFFSET_VALID_MAX, OFFSET_VALID_MAX)
   return [int(v) for v in raw]
 
 
-def encode_lane_path(x, y, canfd: bool = False):
-  """OP lane center (x, y arrays, m, +left) -> 40 raw offsets. All-unavailable if the lane doesn't reach D_MAX."""
+def encode_lane_path(x, y, canfd: bool = False, scale=None):
+  """OP lane center (x, y arrays, m, +left) -> 40 raw offsets. All-unavailable if the lane doesn't reach D_MAX.
+  `scale` (a DashScale) overrides the gain law that `canfd` selects."""
   x = np.asarray(x, dtype=float)
   y = np.asarray(y, dtype=float)
   if x.size < 2 or x.max() < D_MAX:
     return [OFFSET_UNAVAILABLE] * NUM_PTS
-  return _encode(np.interp(LOOKAHEAD, x, y), canfd)
+  scale = scale or (CANFD_SCALE if canfd else RADARLESS_SCALE)
+  return _encode(np.interp(LOOKAHEAD, x, y), scale.gain)
 
 
 # Stock CAN FD radar LANE_PATH behavior (decoded from MDX factory ACC logs with lane lines displayed):
@@ -98,13 +104,37 @@ CANFD_LEN_INTERCEPT = 6.74
 CANFD_LEN_SLOPE = 0.862  # points per m/s
 
 
+@dataclass(frozen=True, eq=False)
+class DashScale:
+  """How one platform's dash reads LANE_PATH and HUD_OBJECTS: the lane gain law, the CAN FD valid-prefix length law,
+  and whether objects are drawn snapped to lanes (see lane_position)."""
+  gain: np.ndarray                       # raw LANE_PATH units per m of lane-center lateral at each LOOKAHEAD
+  len_intercept: float = CANFD_LEN_INTERCEPT
+  len_slope: float = CANFD_LEN_SLOPE     # valid points per m/s
+  max_valid_pts: int = CANFD_MAX_VALID_PTS
+  lane_width: float = 0.0                # > 0: HUD_OBJECTS lateral is lane-snapped, relative to the drawn lane
+  lane_keep: float = 1.0                 # share of an object's offset within its lane kept when snapping
+
+
+RADARLESS_SCALE = DashScale(GAIN_RADARLESS)
+CANFD_SCALE = DashScale(GAIN_CANFD)  # fitted on the MDX
+# CR-V 6G, from its own radar under stock ACC (bosch-c-research scripts/dash_hud_fit.py, 23 stock routes):
+# - valid points = 6.48 + 0.921 * vEgo, up to 30 (not the MDX's 23); LANE_PATH_LENGTH equals it on every lanes-on sweep
+# - HUD_OBJECTS LAT_DIST sits near 0 for the ego lane and near +-3.2 m for the next lanes: the dash draws objects in
+#   lanes, and lane-relative, since on curves snapping the offset from the lane center fits (0.7 m median error) where
+#   snapping the offset from the car doesn't (1.6 m). Lane width 3.0 m keeping half the in-lane offset had the lowest
+#   90th-percentile error (0.44 m; median 0.13 m within 60 m).
+CRV6G_SCALE = DashScale(GAIN_CRV6G, len_intercept=6.48, len_slope=0.921, max_valid_pts=30, lane_width=3.0, lane_keep=0.5)
+
+
 def canfd_lane_length(dash_lane) -> int:
   """Valid-point count of the stock-form path. The stock radar mirrors this in RADAR_LEAD's
   LANE_PATH_LENGTH signal (6 when idle), which the dash cross-checks against the in-band terminator."""
   if dash_lane.reach <= 0.0 or dash_lane.offsets[0] == OFFSET_UNAVAILABLE:
     return CANFD_MIN_VALID_PTS
-  n = round(CANFD_LEN_INTERCEPT + CANFD_LEN_SLOPE * dash_lane.v_ego)
-  return max(CANFD_MIN_VALID_PTS, min(CANFD_MAX_VALID_PTS, n))
+  scale = dash_lane.scale or CANFD_SCALE
+  n = round(scale.len_intercept + scale.len_slope * dash_lane.v_ego)
+  return max(CANFD_MIN_VALID_PTS, min(scale.max_valid_pts, n))
 
 
 def canfd_lane_offsets(dash_lane) -> list[int]:
@@ -183,6 +213,23 @@ class DashLane:
   right_line: bool
   lane_cross: int = 0
   v_ego: float = 0.0   # m/s at fit time; drives the CAN FD valid-point count (stock law is speed-only)
+  scale: DashScale | None = None  # the dash encoding it was fitted for (None: chosen by `canfd`)
+  center: tuple | None = None     # drawn lane center as modelV2 (x, y) arrays (y +right); None when blank
+
+
+def lane_position(dash_lane, d: float, y_left: float, scale: DashScale = CRV6G_SCALE) -> tuple[int, float]:
+  """Lane index (0 = ego lane, +1 = next lane left) and lane-snapped dash lateral (m, +left) of an object at
+  model-frame distance d and lateral y_left, relative to the drawn lane center (the ego frame when nothing is drawn).
+  For dashes that draw objects in lanes (scale.lane_width > 0); `dash_lane` may be None."""
+  if dash_lane is not None and dash_lane.scale is not None:
+    scale = dash_lane.scale
+  c = 0.0
+  if dash_lane is not None and dash_lane.center is not None and dash_lane.reach > 0:
+    cx, cy = dash_lane.center
+    c = -float(np.interp(d, cx, cy))
+  rel = y_left - c
+  lane = round(rel / scale.lane_width)
+  return lane, scale.lane_width * lane + scale.lane_keep * (rel - scale.lane_width * lane)
 
 
 class LanePathFitter:
@@ -207,7 +254,7 @@ class LanePathFitter:
       self._displayed = self._displayed + np.clip(target - self._displayed, -SLEW_MAX_STEP, SLEW_MAX_STEP)
     return [int(v) for v in np.round(self._displayed)]
 
-  def update(self, model, v_ego, lead_d, canfd: bool = False) -> DashLane:
+  def update(self, model, v_ego, lead_d, canfd: bool = False, scale: DashScale | None = None) -> DashLane:
     """`model` = modelV2 (None when invalid); `v_ego` m/s; `lead_d` lead distance m (0 = none). Returns a DashLane.
     Returns blank when the model is missing/invalid, no ego line is confident, or the reach rounds to zero.
     Reach is the drawn length based on speed and lead distance. We don't show full reach as at low speeds because
@@ -227,4 +274,5 @@ class LanePathFitter:
     if round(reach * LANE_LENGTH_MAX_VALUE) <= 0:
       self._displayed = None
       return blank
-    return DashLane(self._slew(encode_lane_path(x, y, canfd)), reach, left_on, right_on, v_ego=v_ego)
+    return DashLane(self._slew(encode_lane_path(x, y, canfd, scale)), reach, left_on, right_on, v_ego=v_ego, scale=scale,
+                    center=(np.asarray(x, dtype=float), np.asarray(y, dtype=float)))

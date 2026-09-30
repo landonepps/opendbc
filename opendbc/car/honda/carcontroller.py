@@ -216,6 +216,9 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
     self.lane_path_msg = "LANE_PATH_ALT" if radarless_hud_addr else "LANE_PATH"
     self.hud_objects_msg = "HUD_OBJECTS_ALT" if radarless_hud_addr else "HUD_OBJECTS"
     self.radar_lead_msg = "RADAR_LEAD_ALT" if radarless_hud_addr else "RADAR_LEAD"
+    # the CR-V 6G's dash reads its own lane gain and length and draws objects in lanes (lane_path.CRV6G_SCALE); other
+    # platforms keep the law their `canfd` flag selects
+    self.dash_scale = lane_path.CRV6G_SCALE if CP.carFingerprint == CAR.HONDA_CRV_6G else None
     # experimental Bosch C radar: show its decoded vehicles, with their radar-reported class icons, on the dash
     self.bosch_c_hud = BoschCHud() if CP_SP.flags & HondaFlagsSP.EXPERIMENTAL_BOSCH_C_RADAR else None
     self.dash_lane = lane_path.DashLane([lane_path.OFFSET_UNAVAILABLE] * lane_path.NUM_PTS, 0.0, False, False)
@@ -1157,7 +1160,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       lead = leads[0]
       lead_d = lead.dRel if lead.status else 0.0  # extend the lane out to the lead (0 = no lead)
       canfd = bool(self.CP.flags & HondaFlags.BOSCH_CANFD)
-      self.dash_lane = self.lane_path_fitter.update(self.model, CS.out.vEgo, lead_d, canfd)
+      self.dash_lane = self.lane_path_fitter.update(self.model, CS.out.vEgo, lead_d, canfd, self.dash_scale)
       # Important: same mux for lane_path and hud_objects. Lane display freezes if muxes don't match.
       if self.CP.flags & HondaFlags.BOSCH_CANFD:
         # self.radar_mux advances one step per 50Hz tick (above), so the mux sweep stays contiguous
@@ -1176,11 +1179,12 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       # secondary vehicle locations: author OP's lead in slot 0 with the other slots blank (tracks=None).
       tracks = CS.hud_object_tracker.snapshot() if CS.hud_object_tracker is not None else None
       if tracks is None and self.bosch_c_hud is not None:
-        tracks = self.bosch_c_hud.tracks(lead)
+        tracks = self.bosch_c_hud.tracks(lead, dash_lane=self.dash_lane, v_ego=CS.out.vEgo)
       if self.CP.openpilotLongitudinalControl:
         # For OP long, replace lead car and forward rest of objects
         hud_msg = self.hud_object_author.create(self.packer, self.CAN.lkas, lead, tracks, mux, now_nanos * 1e-9,
-                                                extra_leads=leads[1:], canfd=canfd, name=self.hud_objects_msg)
+                                                extra_leads=leads[1:], canfd=canfd, name=self.hud_objects_msg,
+                                                dash_lane=self.dash_lane)
       else:
         # For ACC, forward objects but with our mux
         hud_msg = hud_objects.forward_hud_object(self.packer, self.CAN.lkas, mux, tracks)

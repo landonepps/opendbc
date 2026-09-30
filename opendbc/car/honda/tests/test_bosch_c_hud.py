@@ -58,3 +58,37 @@ def test_author_draws_radar_class_for_ops_lead():
   addr, dat, bus = author.create(packer, 0, lead(30), tracks, 1, 100.0, canfd=True, name='HUD_OBJECTS_ALT')
   parser.update([(0, [(addr, dat, bus)])])
   assert parser.vl['HUD_OBJECTS_ALT']['IS_LEAD_CAR'] == 1 and parser.vl['HUD_OBJECTS_ALT']['CAR_TYPE'] == 6
+
+
+def test_oncoming_parked_and_crossing_objects_are_not_shown():
+  # at 20 m/s: oncoming (-20 over ground), never moved (0), and a car moving our way (18)
+  publish(DisplayObject(1, 30, 3.4, -40.0, 1), DisplayObject(2, 20, -3.2, -20.0, 1), DisplayObject(3, 40, 0.1, -2.0, 1))
+  tracks = BoschCHud().tracks(lead(0, status=False), now_s=100.0, v_ego=20.0)
+  assert [t.d_rel for t in tracks if t.valid] == [40]
+
+
+def test_stopped_car_that_was_moving_stays_shown():
+  hud = BoschCHud()
+  publish(DisplayObject(5, 30, -3.3, -5.0, 1))
+  assert [t.d_rel for t in hud.tracks(lead(0, status=False), now_s=100.0, v_ego=20.0) if t.valid] == [30]
+  publish(DisplayObject(5, 25, -3.3, -20.0, 1))  # now stopped
+  assert [t.d_rel for t in hud.tracks(lead(0, status=False), now_s=100.0, v_ego=20.0) if t.valid] == [25]
+
+
+def test_only_the_nearest_car_per_lane_within_one_lane():
+  publish(DisplayObject(1, 20, 3.3, 0, 1), DisplayObject(2, 35, 3.1, 0, 1), DisplayObject(3, 25, 6.4, 0, 1),
+          DisplayObject(4, 30.5, 0.1, 0, 1), DisplayObject(5, 50, 0.3, 0, 1))
+  tracks = BoschCHud().tracks(lead(32), now_s=100.0)
+  assert tracks[0].is_lead_car and tracks[0].d_rel == 30.5
+  # left lane: the nearer car only; two lanes over: none; ego lane: the car behind OP's lead is hidden
+  assert [t.d_rel for t in tracks[1:] if t.valid] == [20]
+
+
+def test_objects_are_placed_in_lanes_relative_to_the_drawn_lane():
+  from opendbc.car.honda import lane_path
+  from opendbc.car.honda.tests.test_lane_path import model_at
+  curve = lane_path.LanePathFitter().update(model_at(-2.0), 30.0, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+  publish(DisplayObject(1, 50, 2.1, 0, 1), DisplayObject(2, 45, 5.3, 0, 1))
+  tracks = BoschCHud().tracks(lead(0, status=False), now_s=100.0, dash_lane=curve)
+  placed = {t.d_rel: t.y_rel for t in tracks if t.valid}
+  assert abs(placed[50] - 0.05) < 1e-6 and abs(placed[45] - 3.15) < 1e-6
