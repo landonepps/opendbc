@@ -4,7 +4,7 @@ import pytest
 
 from opendbc.car import structs
 from opendbc.car.can_definitions import CanData
-from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalibration, OBJECT_IDS, object_crc
+from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalibration, OBJECT_IDS, object_crc, velocity_std
 from opendbc.car.honda.radar_interface import RadarInterface
 
 
@@ -321,6 +321,16 @@ def test_uncertainty_gate_omits_a_lone_newborn_but_fails_open_when_the_field_sti
     counter += 1
     result = feed(radar, counter, {0: dict(wire=1, x=FAR, uncertainty=300)})
   assert [p.trackId for p in result.points] == [2] and radar.decoder.counters['gate_fail_open_banks'] >= 1
+
+
+def test_velocity_stds_follow_each_tracks_uncertainty():
+  radar = gated(enabled=False)
+  feed(radar, 0, {0: dict(wire=1, x=FAR, uncertainty=48), 1: SETTLED})
+  stds = radar.velocity_stds()
+  assert stds.keys() == {1, 2}
+  assert stds[2] == velocity_std(3) and stds[1] == velocity_std(48)
+  assert velocity_std(0) == velocity_std(1) and 0.36 < velocity_std(6) < 0.37
+  assert all(velocity_std(u) < velocity_std(u + 1) for u in range(1, 1023))
 
 
 def test_rejected_banks_become_unavailable_only_after_the_stale_limit(adapter):

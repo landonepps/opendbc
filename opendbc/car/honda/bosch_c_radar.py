@@ -32,6 +32,13 @@ GATE_MAX_UNCERTAINTY = 12
 GATE_FAIL_OPEN_NS = 2_000_000_000
 
 
+def velocity_std(uncertainty_raw: int) -> float:
+  """Speed standard deviation (m/s) for a velocity uncertainty reading (bits 176-185): the pooled fit of short-term
+  vRel noise against the field on seven recordings (bosch-c-research docs/bosch-a-field-counterparts.md). The field's own
+  unit is unknown, so this is empirical."""
+  return 0.034 * max(uncertainty_raw, 1) ** 1.33
+
+
 def can_time_ns():
   # CAN logMonoTime includes suspend time on Linux. Timeout updates must use
   # that same clock or they can precede the last received CAN timestamp.
@@ -301,6 +308,10 @@ class BoschCRadarInterface(RadarInterfaceBase):
     # (soft disable), not canError (immediate disable).
     stale = self.decoder.last_bank_ns is None or now_nanos - self.decoder.last_bank_ns > STALE_NS
     return structs.RadarData.new_message(points=points, errors={'radarUnavailableTemporary': stale})
+
+  def velocity_stds(self) -> dict[int, float]:
+    """Speed standard deviation (m/s) of each current track, by trackId, from its velocity uncertainty."""
+    return {t.track_id: velocity_std(t.raw.uncertainty_candidate_raw) for t in self.decoder.tracks.values()}
 
   def display_objects(self, now_ns: int | None = None):
     """Current vehicles for the dash, including the classes the RadarData guard withholds (3 and 6).
