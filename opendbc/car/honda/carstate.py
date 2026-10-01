@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from collections import defaultdict
+from collections import defaultdict, deque
 
 from opendbc.can import CANDefine, CANParser
 from opendbc.car import Bus, create_button_events, structs, DT_CTRL
@@ -19,6 +19,29 @@ ButtonType = structs.CarState.ButtonEvent.Type
 BUTTONS_DICT = {CruiseButtons.RES_ACCEL: ButtonType.accelCruise, CruiseButtons.DECEL_SET: ButtonType.decelCruise,
                 CruiseButtons.MAIN: ButtonType.mainCruise, CruiseButtons.CANCEL: ButtonType.cancel}
 SETTINGS_BUTTONS_DICT = {CruiseSettings.DISTANCE: ButtonType.gapAdjustCruise, CruiseSettings.LKAS: ButtonType.lkas}
+
+
+class TickReference:
+  """Pulses once per radar tick-reference message, `delay` frames after the frame it arrived in.
+
+  Counting references, rather than frames since the last one, keeps one pulse per reference when the radar's
+  jitter lands two in consecutive frames or one a frame early. Counting frames since the last reference skipped
+  those: on route 000001c0 it dropped about 4% of the 50 Hz references and 6% of the 10 Hz ones. At most
+  MAX_PENDING references wait, so a late card batch catches up by one pulse rather than a burst."""
+  MAX_PENDING = 2
+
+  def __init__(self, delay: int):
+    self.delay = delay
+    self.frame = 0
+    self.due: deque[int] = deque(maxlen=self.MAX_PENDING)
+
+  def update(self, n_refs: int) -> bool:
+    self.frame += 1
+    self.due.extend([self.frame + self.delay] * n_refs)
+    if self.due and self.due[0] <= self.frame:
+      self.due.popleft()
+      return True
+    return False
 
 
 class CarState(CarStateBase, CarStateExt):
@@ -73,14 +96,12 @@ class CarState(CarStateBase, CarStateExt):
     # engine speed, used to distinguish EV/idle-stop from engine-on regimes on hybrids
     self.engine_rpm = 0.0
 
-    self.radar_ref_counter = 0
-    self.radar_5hz_tick_counter = 0
-    self.radar_5hz_tick = False
-    self.supp_tick_counter = 0
+    # one frame before the next tick (see update): periods 100, 10 and 2 frames
+    self.supp_tick_ref = TickReference(99)
     self.supp_tick = False
-    self.hud_tick_counter = 0
+    self.hud_tick_ref = TickReference(9)
     self.hud_tick = False
-    self.radar_50hz_tick_counter = 0
+    self.radar_50hz_tick_ref = TickReference(1)
     self.radar_50hz_tick = False
 
     self.scm_ambient_light = 0
@@ -306,44 +327,17 @@ class CarState(CarStateBase, CarStateExt):
       #
       # There is a one-frame (10 ms) delay between reading a tick here in carstate and transmitting the
       # response in carcontroller. The stock radar sends each data message in the SAME frame as its
-      # tick, so we pulse one frame BEFORE the next tick (counter == period-1): the +1 transmit delay
-      # then lands the message on the next tick frame, matching stock.
-      #   period (frames @100Hz): 0x710=100, 0x730=10, 0x750=2, RADAR_REFERENCE=20
-      self.radar_ref_counter = cp.vl["RADAR_REFERENCE"]["COUNTER"]
+      # tick, so we pulse one frame BEFORE the next tick (period - 1 frames after this one): the +1
+      # transmit delay then lands the message on the next tick frame, matching stock.
+      #   period (frames @100Hz): 0x710=100, 0x730=10, 0x750=2
+      # The 5 Hz lane summary (RADAR_LEAD) has no tick of its own: carcontroller sends it with the lane sweep.
 
-      # 5 Hz: RADAR_REFERENCE (0x3A1) is on the powertrain bus (cp), not the radar bus (cp_radar).
-      # RADAR_LEAD does NOT ride with the reference; stock sends it ~120 ms (12 frames) after, so fire
-      # at frame 11 (+1 transmit delay -> ~120 ms).
-      ref_tick_vals = cp.vl_all.get("RADAR_REFERENCE", {}).get("COUNTER", [])
-      if len(ref_tick_vals) > 0:
-        self.radar_5hz_tick_counter = 0
-      else:
-        self.radar_5hz_tick_counter += 1
-      self.radar_5hz_tick = (self.radar_5hz_tick_counter == 11)
-
-      # 1 Hz: 0x710 -> BOSCH_SUPPLEMENTAL_CANFD, one frame before the next tick
-      supp_tick_vals = cp_radar.vl_all.get("RADAR_SUPP_TICK_REFERENCE", {}).get("IGNORE", [])
-      if len(supp_tick_vals) > 0:
-        self.supp_tick_counter = 0
-      else:
-        self.supp_tick_counter += 1
-      self.supp_tick = (self.supp_tick_counter == 99)
-
-      # 10 Hz: 0x730 -> RADAR_HUD_CANFD, one frame before the next tick
-      hud_tick_vals = cp_radar.vl_all.get("RADAR_HUD_TICK_REFERENCE", {}).get("IGNORE", [])
-      if len(hud_tick_vals) > 0:
-        self.hud_tick_counter = 0
-      else:
-        self.hud_tick_counter += 1
-      self.hud_tick = (self.hud_tick_counter == 9)
-
-      # 50 Hz: 0x750 -> LANE_PATH/HUD_OBJECTS, one frame before the next tick
-      tick_50hz_vals = cp_radar.vl_all.get("RADAR_50HZ_TICK_REFERENCE", {}).get("IGNORE", [])
-      if len(tick_50hz_vals) > 0:
-        self.radar_50hz_tick_counter = 0
-      else:
-        self.radar_50hz_tick_counter += 1
-      self.radar_50hz_tick = (self.radar_50hz_tick_counter == 1)
+      # 1 Hz: 0x710 -> BOSCH_SUPPLEMENTAL_CANFD
+      self.supp_tick = self.supp_tick_ref.update(len(cp_radar.vl_all.get("RADAR_SUPP_TICK_REFERENCE", {}).get("IGNORE", [])))
+      # 10 Hz: 0x730 -> RADAR_HUD_CANFD and ACC_HUD
+      self.hud_tick = self.hud_tick_ref.update(len(cp_radar.vl_all.get("RADAR_HUD_TICK_REFERENCE", {}).get("IGNORE", [])))
+      # 50 Hz: 0x750 -> LANE_PATH/HUD_OBJECTS
+      self.radar_50hz_tick = self.radar_50hz_tick_ref.update(len(cp_radar.vl_all.get("RADAR_50HZ_TICK_REFERENCE", {}).get("IGNORE", [])))
 
       # Deferred radar disable (see carcontroller). The stock radar transmits ACC_CONTROL every 2
       # frames, so 4 missed frames means it has been silenced; assume alive until then so the
@@ -401,6 +395,9 @@ class CarState(CarStateBase, CarStateExt):
       # Both messages intentionally go silent (the radar is disabled, the camera ends up behind the
       # open relay), so subscribe with NaN frequency to skip the alive/timeout checks.
       pt_messages += [("ACC_CONTROL", float('nan')), ("STEERING_CONTROL", float('nan'))]
+      # The radar's 5 Hz RADAR_REFERENCE keeps running while it is disabled. Nothing reads it any more, but its
+      # counter, checksum and alive checks still count toward canValid, as when its counter was read.
+      pt_messages.append(("RADAR_REFERENCE", 0))
     if self.CP.flags & HondaFlags.BOSCH_RADARLESS:
       # HUD_OBJECTS is polled by the HudObjectTracker, but not every radarless camera emits it,
       # so subscribe with NaN frequency to skip the alive/timeout checks.

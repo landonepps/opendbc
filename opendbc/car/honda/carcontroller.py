@@ -222,6 +222,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
     # experimental Bosch C radar: show its decoded vehicles, with their radar-reported class icons, on the dash
     self.bosch_c_hud = BoschCHud() if CP_SP.flags & HondaFlagsSP.EXPERIMENTAL_BOSCH_C_RADAR else None
     self.dash_lane = lane_path.DashLane([lane_path.OFFSET_UNAVAILABLE] * lane_path.NUM_PTS, 0.0, False, False)
+    self.sweep_lane = self.dash_lane  # CAN FD: the lane held for the LANE_PATH bank being sent
     self.lkas_hud_key = None
     self.lkas_state_change_frames = 0
     self.tja_control = bool(CP.flags & HondaFlags.BOSCH_TJA_CONTROL)
@@ -606,16 +607,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
         else:
           self.radar_mux += 1
         # radar_msgs.extend(hondacan.create_canfd_50hz_radar_messages(self.packer, self.CAN.pt, self.radar_mux))
-      if CS.radar_5hz_tick:
-        # RADAR_LEAD's LANE_PATH_LENGTH must track the valid-point count of the LANE_PATH sweep we are
-        # authoring; the stock radar keeps the two in lockstep and the dash won't draw lanes otherwise.
-        # LEFT_LANE/RIGHT_LANE carry the per-side line-detected status (3/0) the same way the stock
-        # radar mirrors the camera's LANE_LINES bits; the dash draws no lane lines while both are 0.
-        radar_msgs.extend(hondacan.create_canfd_5hz_radar_messages(self.packer, self.CAN.pt, CS.radar_ref_counter,
-                                                                   lane_path.canfd_lane_length(self.dash_lane),
-                                                                   lane_path.LANE_LINE_ON if self.dash_lane.left_line else 0,
-                                                                   lane_path.LANE_LINE_ON if self.dash_lane.right_line else 0,
-                                                                   radar_lead_name=self.radar_lead_msg))
+      # The 5 Hz lane summary (RADAR_LEAD) goes out with the LANE_PATH sweep below.
 
       # mirror each packed frame onto both the powertrain bus and the camera bus
       for addr, dat, _ in radar_msgs:
@@ -1166,12 +1158,19 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
         # self.radar_mux advances one step per 50Hz tick (above), so the mux sweep stays contiguous
         # across missed ticks, unlike a frame-derived mux.
         mux = self.radar_mux
+        # The stock radar sends one path per bank. Hold the lane fitted at the bank's first frame for all ten, so the
+        # sweep the dash assembles matches the LANE_PATH_LENGTH the lane summary gives for it; refitting every frame
+        # changed the path mid-sweep and left holes in it.
+        if (mux - 1) % 16 == 0:
+          self.sweep_lane = self.dash_lane
+        drawn_lane = self.sweep_lane
         # No LKAS_HUD_2 on CAN FD: the dash reads the lane length from the stock radar's in-band
         # terminator, so reshape the path into the terminated-prefix form (see lane_path.py).
-        lane_offsets = lane_path.canfd_lane_offsets(self.dash_lane)
+        lane_offsets = lane_path.canfd_lane_offsets(drawn_lane)
       else:
         mux = lane_path.MUX_CYCLE[(self.frame // 2) % len(lane_path.MUX_CYCLE)]
-        lane_offsets = self.dash_lane.offsets
+        drawn_lane = self.dash_lane
+        lane_offsets = drawn_lane.offsets
       lane_msg = lane_path.create_lane_path(self.packer, self.CAN.lkas, lane_offsets, mux, self.lane_path_msg)
       can_sends.append(lane_msg)
 
@@ -1179,12 +1178,12 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       # secondary vehicle locations: author OP's lead in slot 0 with the other slots blank (tracks=None).
       tracks = CS.hud_object_tracker.snapshot() if CS.hud_object_tracker is not None else None
       if tracks is None and self.bosch_c_hud is not None:
-        tracks = self.bosch_c_hud.tracks(lead, dash_lane=self.dash_lane, v_ego=CS.out.vEgo)
+        tracks = self.bosch_c_hud.tracks(lead, dash_lane=drawn_lane, v_ego=CS.out.vEgo)
       if self.CP.openpilotLongitudinalControl:
         # For OP long, replace lead car and forward rest of objects
         hud_msg = self.hud_object_author.create(self.packer, self.CAN.lkas, lead, tracks, mux, now_nanos * 1e-9,
                                                 extra_leads=leads[1:], canfd=canfd, name=self.hud_objects_msg,
-                                                dash_lane=self.dash_lane)
+                                                dash_lane=drawn_lane)
       else:
         # For ACC, forward objects but with our mux
         hud_msg = hud_objects.forward_hud_object(self.packer, self.CAN.lkas, mux, tracks)
@@ -1194,7 +1193,23 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       # own TX is not forwarded across the open relay. Mirror the identical packed bytes onto the camera
       # bus (packed once above, so the counter/checksum don't double-increment and both buses match).
       if self.CP.flags & HondaFlags.BOSCH_CANFD:
-        for addr, dat, _ in (lane_msg, hud_msg):
+        dash_msgs = [lane_msg, hud_msg]
+        bank, index = divmod(mux - 1, 16)
+        if index == 1:
+          # Every CAN FD Honda radar logged (CR-V, Pilot, MDX) sends the lane summary right after each bank's second
+          # LANE_PATH/HUD_OBJECTS pair, with CNTR_REF naming the bank. Timed off RADAR_REFERENCE instead, a missed
+          # 50 Hz tick shifted our sweep against it, and CNTR_REF named the bank a quarter of the time (route 000001c0).
+          # LANE_PATH_LENGTH must equal the sweep's valid-point count; the dash won't draw lanes otherwise.
+          # LEFT_LANE/RIGHT_LANE carry the per-side line-detected status (3/0) the same way the stock
+          # radar mirrors the camera's LANE_LINES bits; the dash draws no lane lines while both are 0.
+          summary = hondacan.create_canfd_5hz_radar_messages(self.packer, self.CAN.pt, bank,
+                                                             lane_path.canfd_lane_length(drawn_lane),
+                                                             lane_path.LANE_LINE_ON if drawn_lane.left_line else 0,
+                                                             lane_path.LANE_LINE_ON if drawn_lane.right_line else 0,
+                                                             radar_lead_name=self.radar_lead_msg)
+          can_sends.extend(summary)
+          dash_msgs += summary
+        for addr, dat, _ in dash_msgs:
           can_sends.append((addr, dat, self.CAN.camera))
 
     if self.frame % 20 == 0 and self.CP.flags & HondaFlags.BOSCH_RADARLESS:

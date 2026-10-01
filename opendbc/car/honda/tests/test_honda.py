@@ -2,6 +2,7 @@ import unittest
 
 from opendbc.can import CANPacker
 from opendbc.car.honda import hondacan, hud_objects, lane_path
+from opendbc.car.honda.carstate import TickReference
 from opendbc.car.honda.interface import CarInterface
 from opendbc.car.honda.values import CAR, HondaFlags, HondaSafetyFlags
 from opendbc.car.interfaces import gen_empty_fingerprint
@@ -40,8 +41,9 @@ class TestHondaCanfdDashHud(unittest.TestCase):
     lane_alt = lane_path.create_lane_path(packer, 0, [lane_path.OFFSET_UNAVAILABLE] * lane_path.NUM_PTS, 1, "LANE_PATH_ALT")
     hud = hud_objects.create_hud_object(packer, 0, 1, None)
     hud_alt = hud_objects.create_hud_object(packer, 0, 1, None, "HUD_OBJECTS_ALT")
-    lead = hondacan.create_canfd_5hz_radar_messages(packer, 0, 1)[0]
-    lead_alt = hondacan.create_canfd_5hz_radar_messages(packer, 0, 1, radar_lead_name='RADAR_LEAD_ALT')[0]
+    # RADAR_LEAD2 first, then the lane summary
+    lead = hondacan.create_canfd_5hz_radar_messages(packer, 0, 1)[-1]
+    lead_alt = hondacan.create_canfd_5hz_radar_messages(packer, 0, 1, radar_lead_name='RADAR_LEAD_ALT')[-1]
     assert (lane[0], hud[0], lead[0]) == (0x6CD5558, 0x6CD5559, 0xF31AA5C)
     assert (lane_alt[0], hud_alt[0], lead_alt[0]) == (0x6CD5554, 0x6CD5557, 0xF31AA54)
     # same signal layout: identical payloads apart from the address-dependent checksum/counter byte
@@ -61,3 +63,29 @@ class TestHondaCanfdDashHud(unittest.TestCase):
     for name, values, addr, stock in frames:
       packed_addr, dat, _ = packer.make_can_msg(name, 0, values)
       assert packed_addr == addr and dat.hex() == stock, (name, dat.hex())
+
+
+class TestTickReference(unittest.TestCase):
+  """The radar's tick references pace the CAN FD dash look-alikes: one pulse per reference, delay frames later."""
+
+  @staticmethod
+  def pulses(refs_per_frame, delay):
+    tick = TickReference(delay)
+    return [i for i, n in enumerate(refs_per_frame) if tick.update(n)]
+
+  def test_steady_50hz(self):
+    # a reference every other frame pulses the frame after each one
+    assert self.pulses([1, 0] * 5, 1) == [1, 3, 5, 7, 9]
+
+  def test_consecutive_references(self):
+    # radar jitter puts two references in back-to-back frames: both still pulse, in turn
+    assert self.pulses([1, 1, 0, 0, 1, 0], 1) == [1, 2, 5]
+
+  def test_early_10hz_reference(self):
+    # the third reference arrives a frame early (9 frames after the second): one pulse each, none skipped
+    refs = [1] + [0] * 9 + [1] + [0] * 8 + [1] + [0] * 10
+    assert self.pulses(refs, 9) == [9, 19, 28]
+
+  def test_backlog_is_capped(self):
+    # a late batch carrying many references catches up by at most MAX_PENDING pulses
+    assert self.pulses([5, 0, 0, 0], 1) == [1, 2]

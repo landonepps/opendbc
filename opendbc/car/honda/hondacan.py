@@ -338,12 +338,22 @@ def create_canfd_50hz_radar_messages(packer, bus, radar_mux):
   return commands
 
 
-def create_canfd_5hz_radar_messages(packer, bus, radar_ref_cntr, lane_path_length=6, left_lane=0, right_lane=0,
+def create_canfd_5hz_radar_messages(packer, bus, bank, lane_path_length=6, left_lane=0, right_lane=0,
                                     radar_lead_name='RADAR_LEAD'):
+  """The lane summary for LANE_PATH bank `bank` (0-3, MUX 1-10 to 49-58), preceded by RADAR_LEAD2 as on the MDX and
+  CR-V radars that send it; the stock radars send both right after the bank's second LANE_PATH/HUD_OBJECTS pair."""
   commands = []
 
+  radar_lead2_values = {
+    'SET_ME_X88': 136,
+    'SET_ME_X78': 120,
+    'LEAD_DISTANCE_MAYBE': 0,
+  }
+  commands.append(packer.make_can_msg('RADAR_LEAD2', bus, radar_lead2_values))
+
   radar_lead_values = {
-    'CNTR_REF': radar_ref_cntr,
+    # stock: the bank whose sweep this summary describes, on every frame of the CR-V, Pilot and MDX logs
+    'CNTR_REF': bank,
     'SET_ME_X01': 0x01,
     # stock radar transmits a constant 140 here (confirmed from logs); 120 causes a camera mismatch
     'TARGET_SPEED_MAYBE': 140,
@@ -357,13 +367,6 @@ def create_canfd_5hz_radar_messages(packer, bus, radar_ref_cntr, lane_path_lengt
     'LANE_PATH_LENGTH': lane_path_length,
   }
   commands.append(packer.make_can_msg(radar_lead_name, bus, radar_lead_values))
-
-  radar_lead2_values = {
-    'SET_ME_X88': 136,
-    'SET_ME_X78': 120,
-    'LEAD_DISTANCE_MAYBE': 0,
-  }
-  commands.append(packer.make_can_msg('RADAR_LEAD2', bus, radar_lead2_values))
 
   return commands
 
