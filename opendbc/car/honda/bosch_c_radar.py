@@ -63,7 +63,7 @@ class RawObject:
   frame_phase: int
   lifecycle: int
   range_raw: int  # bits 48-59
-  status: int     # bits 60-63: object class. 1 car, 3 truck; 6-11 are not reliably one object type (see the DBC)
+  status: int     # bits 60-63: object class. 1 car, 3 large vehicle, 6 small vehicle; 7-11 are not reliably one object type (see the DBC)
   y_raw: int      # bits 64-77: 14-bit offset binary lateral, zero at 8191
   life_state_raw: int  # bits 78-79: 0 newborn, 1 established, 2 ending (candidate; the firmware reads values 0-3)
   velocity_raw: int
@@ -113,8 +113,12 @@ class CandidateCalibration:
             (raw.velocity_raw - self.velocity_zero) * self.velocity_scale)
 
 
-# 1 car, 3 truck. 6 keeps the motorcycle icon as a debugging aid: on video it is often a car (see the DBC)
-DISPLAY_STATUSES = (1, 3, 6)
+# Object classes (bits 60-63) with the camera's vehicle record layout, published to RadarData and drawn on the dash:
+# 1 car, 3 large vehicle (trucks, trailers, high-roof vans; the dash's truck icon), 6 two-wheeler or other small
+# vehicle (the dash's motorcycle icon; near the car it is often a car on video, and its readings are noisier). One
+# vehicle can flip between 1 and 3 without its range moving. 7-11 use a different record layout and are not reliably
+# one object type (see the DBC).
+VEHICLE_STATUSES = (1, 3, 6)
 
 
 @dataclass(frozen=True)
@@ -299,9 +303,9 @@ class BoschCRadarInterface(RadarInterfaceBase):
     for track in self.decoder.tracks.values():
       raw = track.raw
       x, y, v = self.calibration.convert(raw)
-      # Publish cars only (status 1). Plausibility bounds are the offline empirical guard, not a recovered
+      # Publish vehicles. Plausibility bounds are the offline empirical guard, not a recovered
       # validity rule; quality-container values never gate the baseline.
-      if not (raw.status == 1 and 0 < x < 160 and abs(y) < 20 and abs(v) < 90):
+      if not (raw.status in VEHICLE_STATUSES and 0 < x < 160 and abs(y) < 20 and abs(v) < 90):
         self.guard_rejected += 1
         continue
       points.append(dict(trackId=track.track_id, dRel=x, yRel=y, vRel=v))
@@ -316,13 +320,12 @@ class BoschCRadarInterface(RadarInterfaceBase):
     return {t.track_id: velocity_std(t.raw.uncertainty_candidate_raw) for t in self.decoder.tracks.values()}
 
   def display_objects(self, now_ns: int | None = None):
-    """Current vehicles for the dash, including the classes the RadarData guard withholds (3 and 6).
-    Display only: nothing here reaches RadarData."""
+    """Current vehicles for the dash, the classes RadarData carries. Display only: nothing here reaches RadarData."""
     now = now_ns if now_ns is not None else self.decoder.now_ns
     out = []
     for track in self.decoder.tracks.values():
       raw = track.raw
-      if raw.status not in DISPLAY_STATUSES or now is None or now - track.time_ns > STALE_NS:
+      if raw.status not in VEHICLE_STATUSES or now is None or now - track.time_ns > STALE_NS:
         continue
       x, y, v = self.calibration.convert(raw)
       if 0 < x < 160 and abs(y) < 20 and abs(v) < 90:

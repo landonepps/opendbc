@@ -425,13 +425,14 @@ def status_x(raw12, status):
 
 
 def test_status_and_12bit_range_for_display(adapter):
-  # classes 1 (car), 6 (bit 60 clear) and 7; only the car passes the RadarData guard, and 7 is not drawn
-  objs = {0: (1, status_x(600, 1)), 1: (2, status_x(700, 6)), 2: (3, status_x(500, 7))}
+  # classes 1 (car), 3 (large vehicle), 6 (bit 60 clear) and 7; the vehicle classes 1, 3 and 6 pass the RadarData
+  # guard and are drawn, and 7 is neither
+  objs = {0: (1, status_x(600, 1)), 1: (2, status_x(700, 6)), 2: (3, status_x(500, 7)), 3: (4, status_x(800, 3))}
   frames = [frame(address, 0, wire=objs[slot][0] if slot in objs else 0, x=objs[slot][1] if slot in objs else 4700)
             for slot, address in enumerate(OBJECT_IDS)]
   result = adapter.update([(0, frames)])
   statuses = {t.raw.wire_id: t.raw.status for t in adapter.decoder.tracks.values()}
-  assert statuses == {1: 1, 2: 6, 3: 7}
-  assert [p.dRel for p in result.points] == [pytest.approx(600 * .05 - 4.296)]
+  assert statuses == {1: 1, 2: 6, 3: 7, 4: 3}
+  assert sorted(p.dRel for p in result.points) == [pytest.approx(x * .05 - 4.296) for x in (600, 700, 800)]
   shown = {o.status: o.d_rel for o in adapter.display_objects()}
-  assert shown == {1: pytest.approx(600 * .05 - 4.296), 6: pytest.approx(700 * .05 - 4.296)}
+  assert shown == {1: pytest.approx(600 * .05 - 4.296), 3: pytest.approx(800 * .05 - 4.296), 6: pytest.approx(700 * .05 - 4.296)}
