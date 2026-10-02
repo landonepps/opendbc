@@ -1,6 +1,8 @@
 """Experimental Bosch C receive-only adapter for the existing RadarData contract.
 
-Units and measurement validity remain provisional. Construction requires explicit
+Field boundaries and scales follow the radar firmware's own decode (8S302-3A0-A230 and
+-A070; bosch-c-research docs/radar-firmware-a230.md). The radar receives this bank from the
+stock camera on the private bus; it is the camera's object list. Construction requires explicit
 calibration. Normal Honda selection stays off by default; the separately gated
 bosch_c_radar_live wrapper adds receive-age checks for an authorized experiment.
 """
@@ -18,6 +20,7 @@ from opendbc.car.interfaces import RadarInterfaceBase
 
 OBJECT_IDS = tuple(range(0x62, 0x82, 2))
 STALE_NS = 200_000_000
+Y_ZERO = 8191  # raw lateral that the radar firmware decodes as 0 m
 
 # Opt-in uncertainty gate (research: bosch-c-research docs/undecoded-field-inventory.md).
 # Bits 176-185 track velocity uncertainty (sigma rises monotonically with it);
@@ -34,8 +37,8 @@ GATE_FAIL_OPEN_NS = 2_000_000_000
 
 def velocity_std(uncertainty_raw: int) -> float:
   """Speed standard deviation (m/s) for a velocity uncertainty reading (bits 176-185): the pooled fit of short-term
-  vRel noise against the field on seven recordings (bosch-c-research docs/bosch-a-field-counterparts.md). The field's own
-  unit is unknown, so this is empirical."""
+  vRel noise against the field on seven recordings (bosch-c-research docs/bosch-a-field-counterparts.md). The radar
+  firmware reads the field as 0.1 per count but names no unit, so this mapping stays empirical."""
   return 0.034 * max(uncertainty_raw, 1) ** 1.33
 
 
@@ -55,26 +58,25 @@ def object_crc(address: int, payload: bytes) -> int:
 @dataclass(frozen=True)
 class RawObject:
   slot: int
-  wire_id: int
+  wire_id: int    # bits 32-39
   frame_counter: int
   frame_phase: int
   lifecycle: int
   range_raw: int  # bits 48-59
   status: int     # bits 60-63: object class. 1 car, 3 truck; 6-11 are not reliably one object type (see the DBC)
-  y_raw: int            # bits 64-76; bit 77 (the low bit of y_companion_raw) is the top bit of the lateral
-  y_companion_raw: int  # bits 77-79
+  y_raw: int      # bits 64-77: 14-bit offset binary lateral, zero at 8191
+  life_state_raw: int  # bits 78-79: 0 newborn, 1 established, 2 ending (candidate; the firmware reads values 0-3)
   velocity_raw: int
-  quality_container_raw: int
+  quality_container_raw: int  # bits 144-153
   lateral_velocity_candidate_raw: int
   normalized_rate_candidate_raw: int
   uncertainty_candidate_raw: int = 0  # bits 176-185; velocity-uncertainty candidate, unitless
 
   @property
   def signed_y_raw(self):
-    # 14-bit offset binary, bits 64-77 minus 8192 (research: bosch-c-research docs/lateral-velocity-96-10.md).
-    # Within +-40.95 m bit 77 is the inverse of bit 76, so this equals the 13-bit two's complement value. A 13-bit
-    # decode wraps beyond that, and objects 62-82 m to the side would read as within 20 m of the path.
-    return self.y_raw + ((self.y_companion_raw & 1) << 13) - 8192
+    # The radar firmware reads bits 64-77 as 0.01*raw - 81.91 m: one 14-bit offset-binary field, zero at 8191.
+    # A 13-bit decode wraps past +-40.95 m, and objects 62-82 m to the side would read as within 20 m of the path.
+    return self.y_raw - Y_ZERO
 
 
 def unpack(address: int, payload: bytes) -> RawObject:
@@ -85,9 +87,9 @@ def unpack(address: int, payload: bytes) -> RawObject:
   def bits(start, width):
     return (value >> start) & ((1 << width) - 1)
 
-  return RawObject((address - 0x62) // 2, bits(32, 16), payload[2], payload[3] & 15,
-                   bits(271, 12), bits(48, 12), bits(60, 4), bits(64, 13), bits(77, 3),
-                   bits(80, 11), bits(144, 16), bits(96, 10), bits(128, 16), bits(176, 10))
+  return RawObject((address - 0x62) // 2, bits(32, 8), payload[2], payload[3] & 15,
+                   bits(271, 12), bits(48, 12), bits(60, 4), bits(64, 14), bits(78, 2),
+                   bits(80, 11), bits(144, 10), bits(96, 10), bits(128, 16), bits(176, 10))
 
 
 @dataclass(frozen=True)

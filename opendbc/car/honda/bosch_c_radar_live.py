@@ -1,10 +1,12 @@
 """Default-off Bosch C integration for the tested CR-V and receive-bus layout.
 
-Distance, velocity and lateral position use the accepted working conversions
-(lateral 0.01 m/count since 2026-09-28, from gyro yaw kinematics, camera lateral
-and azimuth-field consistency; previously 1/128). None is a recovered firmware
-constant. This module sends no CAN and changes no safety, silencing,
-fusion or controller algorithms. Activation is read at startup.
+Distance, velocity and lateral position use the radar firmware's own decode
+(0.05 m, 0.01 m and 0.1 m/s per count; lateral zero 8191, velocity zero 1540,
+since 2026-10-02; bosch-c-research docs/radar-firmware-a230.md). The -4.296 m
+range offset is the measured offset to the bumper reference: the firmware reads
+range with no offset, in the camera's frame. This module sends no CAN and
+changes no safety, silencing, fusion or controller algorithms. Activation is
+read at startup.
 """
 import time
 
@@ -15,7 +17,7 @@ from opendbc.car.honda.values import CAR, HondaFlags
 from opendbc.sunnypilot.car.honda.values_ext import HondaFlagsSP
 
 
-PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 0, -4.296000000000001, .01, .1, 1539)
+PROVISIONAL_CALIBRATION = CandidateCalibration(.05, 0, -4.296000000000001, .01, .1, 1540)
 
 
 def supported(CP):

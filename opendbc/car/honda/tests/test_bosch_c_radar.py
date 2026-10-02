@@ -4,18 +4,18 @@ import pytest
 
 from opendbc.car import structs
 from opendbc.car.can_definitions import CanData
-from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalibration, OBJECT_IDS, object_crc, velocity_std
+from opendbc.car.honda.bosch_c_radar import BoschCRadarInterface, CandidateCalibration, OBJECT_IDS, Y_ZERO, object_crc, velocity_std
 from opendbc.car.honda.radar_interface import RadarInterface
 
 
-CALIBRATION = CandidateCalibration(.05, 0, -4.296, 1 / 128, .1, 1539)
+CALIBRATION = CandidateCalibration(.05, 0, -4.296, 1 / 128, .1, 1540)
 
 
-def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1519, quality=1, uncertainty=4, y14=None):
-  # y is the 13-bit two's complement lateral; the radar sets bit 77 to the inverse of bit 76 within +-40.95 m.
-  # y14 overrides it with the full 14-bit offset-binary value at bits 64-77.
+def frame(address, counter=0, phase=None, wire=0, life=None, x=4700, y=0, velocity=1520, quality=1, uncertainty=4, y14=None):
+  # y is the signed lateral in counts; bits 64-77 carry it as 14-bit offset binary with zero at Y_ZERO (radar firmware).
+  # y14 overrides it with the raw 14-bit value.
   value = 0
-  y14 = y | ((0 if y & 4096 else 1) << 13) if y14 is None else y14
+  y14 = Y_ZERO + y if y14 is None else y14
   fields = [(16, counter), (24, counter % 16 if phase is None else phase), (32, wire), (48, x),
             (64, y14), (80, velocity), (144, quality), (176, uncertainty), (271, 3 * counter % 4096 if life is None else life)]
   for start, raw in fields:
@@ -48,7 +48,7 @@ def test_required_explicit_calibration_and_platform_gate():
     BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CALIBRATION, bus=129)
   for value in (float('nan'), float('inf'), 0, -1):
     with pytest.raises(ValueError):
-      CandidateCalibration(value, 0, 0, 1 / 128, .1, 1539)
+      CandidateCalibration(value, 0, 0, 1 / 128, .1, 1540)
 
 
 def test_normal_honda_interface_and_carparams_unchanged():
@@ -62,7 +62,7 @@ def test_normal_honda_interface_and_carparams_unchanged():
 
 
 def test_all_slots_required_and_raw_diagnostics_preserved(adapter):
-  frames = bank(quality=1023, y=8191)
+  frames = bank(quality=1023, y=-1)
   assert not adapter.update([(0, frames[:15])]).points
   result = adapter.update([(1, frames[15:])])
   assert len(result.points) == 1 and not result.errors.radarUnavailableTemporary
@@ -75,19 +75,20 @@ def test_all_slots_required_and_raw_diagnostics_preserved(adapter):
   assert report['calibration'] == asdict(CALIBRATION)
 
 
-@pytest.mark.parametrize('y14, meters', [(8192 + 4115, 41.15), (8192 - 4115, -41.15), (8192 + 4095, 40.95), (8192 - 4096, -40.96)])
+@pytest.mark.parametrize('y14, meters', [(Y_ZERO + 4115, 41.15), (Y_ZERO - 4115, -41.15), (Y_ZERO + 4096, 40.96), (Y_ZERO - 4095, -40.95),
+                                          (Y_ZERO, 0), (0, -81.91), (16383, 81.92)])
 def test_lateral_is_14bit_offset_binary(y14, meters):
-  # a 13-bit two's complement decode reads 12307 as -40.77 m; bit 77 carries the sign past +-40.96 m
+  # The radar firmware decodes bits 64-77 as 0.01*raw - 81.91 m. A 13-bit two's complement decode reads 12306 as -40.78 m.
   from opendbc.car.honda.bosch_c_radar import unpack
   f = frame(OBJECT_IDS[0], y14=y14)
-  assert CandidateCalibration(.05, 0, -4.296, .01, .1, 1539).convert(unpack(f.address, f.dat))[1] == pytest.approx(meters)
+  assert CandidateCalibration(.05, 0, -4.296, .01, .1, 1540).convert(unpack(f.address, f.dat))[1] == pytest.approx(meters)
 
 
 def test_far_lateral_object_does_not_wrap_into_the_path():
   # +72 m lateral would read as -9.92 m under a 13-bit decode, inside the |y| < 20 m publication guard
-  calibrated = BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CandidateCalibration(.05, 0, -4.296, .01, .1, 1539),
+  calibrated = BoschCRadarInterface(cp(), structs.CarParamsSP(), calibration=CandidateCalibration(.05, 0, -4.296, .01, .1, 1540),
                                     clock=lambda: 300_000_000)
-  frames = [frame(address, 0, wire=1 if slot == 0 else 0, y14=8192 + 7200) for slot, address in enumerate(OBJECT_IDS)]
+  frames = [frame(address, 0, wire=1 if slot == 0 else 0, y14=Y_ZERO + 7200) for slot, address in enumerate(OBJECT_IDS)]
   result = calibrated.update([(0, frames)])
   assert not result.points and calibrated.guard_rejected == 1
 
@@ -356,9 +357,8 @@ def test_shipped_dbc_matches_adapter_decode():
 
   names = dict(wire_id='OBJECT_ID_RAW', frame_counter='FRAME_COUNTER_RAW', frame_phase='FRAME_PHASE_RAW',
                lifecycle='LIFECYCLE_RAW', range_raw='POSITION_X_RAW', status='OBJECT_CLASS_RAW', y_raw='POSITION_Y_RAW',
-               y_companion_raw='Y_COMPANION_RAW', velocity_raw='VELOCITY_RAW', quality_container_raw='QUALITY_CONTAINER_RAW',
-               lateral_velocity_candidate_raw='LATERAL_VELOCITY_CANDIDATE_RAW',
-               normalized_rate_candidate_raw='NORMALIZED_RATE_CANDIDATE_RAW',
+               life_state_raw='LIFE_STATE_CANDIDATE_RAW', velocity_raw='VELOCITY_RAW', quality_container_raw='QUALITY_CONTAINER_RAW',
+               lateral_velocity_candidate_raw='LATERAL_VELOCITY_RAW', normalized_rate_candidate_raw='NORMALIZED_RATE_RAW',
                uncertainty_candidate_raw='REL_VELOCITY_UNCERTAINTY_RAW')
   rng = random.Random(0)
   parser = CANParser('honda_bosch_c_radar', [(address, 0) for address in OBJECT_IDS], 1)
@@ -370,10 +370,14 @@ def test_shipped_dbc_matches_adapter_decode():
       assert {field: getattr(raw, field) for field in names} == {field: dbc[name] for field, name in names.items()}
       x, y, v = PROVISIONAL_CALIBRATION.convert(raw)
       assert (dbc['DREL'], dbc['YREL'], dbc['VREL']) == pytest.approx((x, y, v))
-      angles = int.from_bytes(payload, 'little')
-      assert dbc['TTC'] == pytest.approx(((angles >> 201) & 2047) / 128 - 8)
+      value = int.from_bytes(payload, 'little')
+      # the radar firmware's own decodes (bosch-c-research docs/radar-firmware-a230.md)
+      assert dbc['LATERAL_VELOCITY'] == pytest.approx(raw.lateral_velocity_candidate_raw * 0.1 - 51.1)
+      assert dbc['NORMALIZED_RATE'] == pytest.approx(raw.normalized_rate_candidate_raw * 0.001 - 40)
+      assert dbc['EXISTENCE_PROBABILITY'] == pytest.approx(((value >> 121) & 63) * 2)
+      assert dbc['TTC'] == pytest.approx(((value >> 201) & 2047) / 128 - 8)
       for start, name in ((411, 'AZIMUTH_CENTER'), (424, 'AZIMUTH_EDGE_A'), (440, 'AZIMUTH_EDGE_B')):
-        assert dbc[name] == pytest.approx(((angles >> start) & 8191) / 4096 - 1)
+        assert dbc[name] == pytest.approx(((value >> start) & 8191) * 0.00025 - 1.02375)
 
 
 def test_shipped_dbc_ego_motion_fields():
