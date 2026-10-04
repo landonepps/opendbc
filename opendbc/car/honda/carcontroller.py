@@ -1178,7 +1178,7 @@ class CarController(CarControllerBase, MadsCarController, GasInterceptorCarContr
       # secondary vehicle locations: author OP's lead in slot 0 with the other slots blank (tracks=None).
       tracks = CS.hud_object_tracker.snapshot() if CS.hud_object_tracker is not None else None
       if tracks is None and self.bosch_c_hud is not None:
-        tracks = self.bosch_c_hud.tracks(lead, dash_lane=drawn_lane, v_ego=CS.out.vEgo)
+        tracks = self.bosch_c_hud.tracks(lead, dash_lane=drawn_lane, v_ego=CS.out.vEgo, lead_id=self.hud_object_author.lead_id)
       if self.CP.openpilotLongitudinalControl:
         # For OP long, replace lead car and forward rest of objects
         hud_msg = self.hud_object_author.create(self.packer, self.CAN.lkas, lead, tracks, mux, now_nanos * 1e-9,

@@ -2,7 +2,7 @@ import pytest
 
 from opendbc.can import CANPacker, CANParser
 from opendbc.car.honda import bosch_c_radar_live, hud_objects
-from opendbc.car.honda.bosch_c_hud import BoschCHud, CAR_TYPE_BY_STATUS
+from opendbc.car.honda.bosch_c_hud import BoschCHud, CAR_TYPE_BY_STATUS, HANDOFF_S
 from opendbc.car.honda.bosch_c_radar import DisplayObject
 
 
@@ -75,13 +75,74 @@ def test_stopped_car_that_was_moving_stays_shown():
   assert [t.d_rel for t in hud.tracks(lead(0, status=False), now_s=100.0, v_ego=20.0) if t.valid] == [25]
 
 
-def test_only_the_nearest_car_per_lane_within_one_lane():
+def test_every_car_in_the_ego_and_adjacent_lanes():
   publish(DisplayObject(1, 20, 3.3, 0, 1), DisplayObject(2, 35, 3.1, 0, 1), DisplayObject(3, 25, 6.4, 0, 1),
           DisplayObject(4, 30.5, 0.1, 0, 1), DisplayObject(5, 50, 0.3, 0, 1))
   tracks = BoschCHud().tracks(lead(32), now_s=100.0)
   assert tracks[0].is_lead_car and tracks[0].d_rel == 30.5
-  # left lane: the nearer car only; two lanes over: none; ego lane: the car behind OP's lead is hidden
-  assert [t.d_rel for t in tracks[1:] if t.valid] == [20]
+  # left lane: both cars, nearest first; two lanes over: none; ego lane: the car behind OP's lead is hidden
+  assert [t.d_rel for t in tracks[1:] if t.valid] == [20, 35]
+
+
+def shown(hud, now, **kwargs):
+  return {t.object_id: t.d_rel for t in hud.tracks(lead(0, status=False), now_s=now, **kwargs) if t.valid}
+
+
+def test_an_id_that_left_one_car_is_not_given_to_the_next():
+  hud = BoschCHud()
+  publish(DisplayObject(1, 3, -3.3, 0, 1), DisplayObject(2, 40, -3.3, 0, 1))
+  first = shown(hud, 100.0)
+  publish(DisplayObject(2, 40, -3.3, 0, 1), DisplayObject(3, 70, 3.3, 0, 1), now=102.0)
+  second = shown(hud, 102.0)
+  near_id = next(i for i, d in first.items() if d == 3)
+  assert near_id not in second and len(second) == 2
+
+
+def test_a_new_track_takes_the_id_of_the_car_the_radar_dropped():
+  hud = BoschCHud()
+  publish(DisplayObject(1, 30, -3.3, -2.0, 1))
+  [car] = shown(hud, 100.0)
+  publish(now=100.2)  # dropped: the car stays drawn where its speed takes it
+  assert shown(hud, 100.2) == {car: pytest.approx(29.6)}
+  publish(DisplayObject(2, 29.0, -3.4, -2.0, 1), now=100.4)  # re-created
+  assert shown(hud, 100.4) == {car: 29.0}
+  publish(DisplayObject(2, 28.6, -3.4, -2.0, 1), now=100.6)
+  assert shown(hud, 100.6) == {car: 28.6}
+
+
+def test_a_dropped_car_goes_after_the_hold_or_once_behind_us():
+  hud = BoschCHud()
+  publish(DisplayObject(1, 30, -3.3, 0, 1), DisplayObject(2, 1.0, 3.3, -5.0, 1))
+  assert len(shown(hud, 100.0)) == 2
+  publish(now=100.3)
+  assert list(shown(hud, 100.3).values()) == [30]  # the car beside us has passed behind
+  publish(now=100.0 + HANDOFF_S + .05)
+  assert shown(hud, 100.0 + HANDOFF_S + .05) == {}
+
+
+def test_a_new_track_drawn_a_lane_off_takes_over_once_in_the_lane():
+  hud = BoschCHud()
+  publish(DisplayObject(1, 10, -3.3, 0, 1))
+  [car] = shown(hud, 100.0)
+  publish(DisplayObject(2, 10.5, -5.4, 0, 1), now=100.2)  # the new track's first lateral is two lanes over
+  assert shown(hud, 100.2) == {car: 10}
+  publish(DisplayObject(2, 10.5, -4.0, 0, 1), now=100.3)
+  assert shown(hud, 100.3) == {car: 10.5}
+
+
+def test_a_new_track_beside_the_dropped_car_replaces_it():
+  hud = BoschCHud()
+  publish(DisplayObject(1, 20, 3.3, 0, 1))
+  shown(hud, 100.0)
+  publish(DisplayObject(1, 20, 3.3, 0, 1), DisplayObject(2, 21, 3.2, 0, 1), now=100.1)  # started before 1 ended
+  ids = shown(hud, 100.1)
+  publish(DisplayObject(2, 21, 3.2, 0, 1), now=100.2)
+  assert list(shown(hud, 100.2).values()) == [21] and set(ids) >= set(shown(hud, 100.2))
+
+
+def test_the_authors_lead_id_is_not_given_to_another_car():
+  publish(DisplayObject(1, 40, 3.3, 0, 1))
+  assert list(shown(BoschCHud(), 100.0, lead_id=1)) != [1]
 
 
 def test_objects_are_placed_in_lanes_relative_to_the_drawn_lane():

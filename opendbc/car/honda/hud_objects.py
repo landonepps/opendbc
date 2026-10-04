@@ -289,6 +289,11 @@ class HudObjectAuthor:
     self._extra_smooth = {slot: LeadSmoother() for slot in EXTRA_LEAD_SLOTS}
     self._extra_emit = dict.fromkeys(EXTRA_LEAD_SLOTS, 0)   # emitted OBJECT_ID per extra slot
 
+  @property
+  def lead_id(self) -> int:
+    """The OBJECT_ID last sent for OP's lead (0 = none)."""
+    return self._lead_id
+
   def _update_extras(self, extra_leads, lead, in_use, now, dash_lane=None):
     """Per-tick state update for the extra leads; returns {slot: track-dict-or-None}. Extras must
     stay distinct from the primary lead and from each other, and their OBJECT_IDs must not collide
