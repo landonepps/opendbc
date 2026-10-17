@@ -106,5 +106,44 @@ class TestLanePathGain(unittest.TestCase):
     assert dl.offsets == lane_path.encode_lane_path(*_lane_xy(-2.0), canfd=True)
 
 
+class TestCrv6gDashScale(unittest.TestCase):
+  def test_crv6g_uses_its_own_gain_law(self):
+    x, y = _lane_xy(-2.0)
+    lat = np.interp(lane_path.LOOKAHEAD, np.asarray(x), np.asarray(y))
+    expected = [int(v) for v in np.clip(np.round(-lane_path.GAIN_CRV6G * lat), -lane_path.OFFSET_VALID_MAX, lane_path.OFFSET_VALID_MAX)]
+    assert lane_path.encode_lane_path(x, y, scale=lane_path.CRV6G_SCALE) == expected
+    # far flatter than the MDX law it replaces on this car
+    canfd = lane_path.encode_lane_path(x, y, canfd=True)
+    assert all(abs(c) > 2.5 * abs(v) for c, v in zip(canfd[:30], expected[:30], strict=True) if v)
+
+  def test_fitter_keeps_scale_and_lane_center(self):
+    dl = lane_path.LanePathFitter().update(model_at(-2.0), V_EGO, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+    assert dl.scale is lane_path.CRV6G_SCALE and dl.center is not None
+    assert dl.offsets == lane_path.encode_lane_path(*_lane_xy(-2.0), scale=lane_path.CRV6G_SCALE)
+
+  def test_crv6g_lane_length_reaches_30_points(self):
+    dl = lane_path.LanePathFitter().update(model_at(0.0), 10.0, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+    assert lane_path.canfd_lane_length(dl) == round(6.48 + 0.921 * 10.0)
+    dl = lane_path.LanePathFitter().update(model_at(0.0), 30.0, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+    assert lane_path.canfd_lane_length(dl) == 30
+    assert lane_path.canfd_lane_offsets(dl)[29] != lane_path.OFFSET_UNAVAILABLE
+    # the MDX law still stops at 23
+    dl = lane_path.LanePathFitter().update(model_at(0.0), 30.0, 0.0, canfd=True)
+    assert lane_path.canfd_lane_length(dl) == lane_path.CANFD_MAX_VALID_PTS
+
+  def test_lane_position_snaps_relative_to_the_drawn_lane(self):
+    straight = lane_path.LanePathFitter().update(model_at(0.0), V_EGO, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+    lane, y = lane_path.lane_position(straight, 30.0, 3.4)
+    assert lane == 1 and math.isclose(y, 3.0 + 0.5 * 0.4)
+    lane, y = lane_path.lane_position(straight, 30.0, -0.4)
+    assert lane == 0 and math.isclose(y, -0.2)
+    # the lane center sits 2 m to the left (model y is +right): a car 2.3 m left is in the ego lane
+    shifted = lane_path.LanePathFitter().update(model_at(-2.0), V_EGO, 0.0, canfd=True, scale=lane_path.CRV6G_SCALE)
+    lane, y = lane_path.lane_position(shifted, 30.0, 2.3)
+    assert lane == 0 and math.isclose(y, 0.15)
+    # nothing drawn: the ego frame
+    assert lane_path.lane_position(None, 30.0, 3.4)[0] == 1
+
+
 if __name__ == "__main__":
   unittest.main()
