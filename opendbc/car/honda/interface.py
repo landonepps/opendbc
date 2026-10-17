@@ -2,7 +2,8 @@
 import numpy as np
 from opendbc.car import get_safety_config, structs, uds
 from opendbc.car.common.conversions import Conversions as CV
-from opendbc.car.disable_ecu import disable_ecu, clear_all_dtcs, clear_ecu_dtcs
+from opendbc.car.carlog import carlog
+from opendbc.car.disable_ecu import disable_ecu, clear_all_dtcs, clear_ecu_dtcs, format_dtc, read_ecu_data
 from opendbc.car.honda.hondacan import CanBus
 from opendbc.car.honda.values import CarControllerParams, HondaFlags, CAR, HondaSafetyFlags, HONDA_BOSCH, HONDA_BOSCH_CANFD, HONDA_BOSCH_RADARLESS
 from opendbc.car.honda.carcontroller import CarController
@@ -13,6 +14,33 @@ from opendbc.car.interfaces import CarInterfaceBase
 from opendbc.sunnypilot.car.honda.values_ext import HondaFlagsSP, HondaSafetyFlagsSP
 
 TransmissionType = structs.CarParams.TransmissionType
+
+
+def log_canfd_adas_diagnostics(CP, can_recv, can_send):
+  """Log what the CAN FD radar and camera hold at startup, before init() clears any DTCs.
+
+  The radar holds the driver-assist system's DTCs and its function cancel history (DID 0xAA02): one
+  leading byte, then the last ten automatic cancels, each a one-byte cause code and a three-byte
+  odometer in km (layout from the Foxwell scanner database). The cancel history survived the radar's
+  DTC clear in the first readings. The DTCs are read before any clear, so the list shows what the
+  previous drive left behind."""
+  reads = [
+    ('radar', CanBus(CP).pt, 0x18DAB0F1, b'\x22\xaa\x02', b'\x62\xaa\x02'),
+    ('radar', CanBus(CP).pt, 0x18DAB0F1, b'\x19\x02\xff', b'\x59\x02'),
+    ('camera', CanBus(CP).camera, 0x18DAB5F1, b'\x19\x02\xff', b'\x59\x02'),
+  ]
+  for name, bus, addr, request, response in reads:
+    dat = read_ecu_data(can_recv, can_send, bus, addr, request, response)
+    if dat is None:
+      carlog.warning(f"{name} diagnostics {request.hex()}: no data")
+      continue
+    # both layouts are a one-byte header followed by four-byte records
+    records = [dat[i:i + 4] for i in range(1, len(dat) - 3, 4)]
+    if request[0] == 0x19:
+      decoded = 'DTCs ' + ' '.join(f'{format_dtc(r[:3])}:{r[3]:02x}' for r in records)
+    else:
+      decoded = 'cancels (code@km) ' + ' '.join(f'{r[0]}@{int.from_bytes(r[1:], "big")}' for r in records)
+    carlog.warning(f"{name} diagnostics {request.hex()}: {dat.hex()} {decoded}")
 
 
 class CarInterface(CarInterfaceBase):
@@ -461,6 +489,12 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def init(CP, CP_SP, can_recv, can_send, communication_control=None):
+    if communication_control is None and CP.carFingerprint in HONDA_BOSCH_CANFD:
+      # Read what the radar holds at every startup, with or without openpilot longitudinal and before the
+      # clear below. With stock longitudinal nothing is cleared or silenced, so this is the radar's state
+      # at the start of a drive the comma never acted on. A call with communication_control set is a re-enable, not a startup.
+      log_canfd_adas_diagnostics(CP, can_recv, can_send)
+
     if CP.carFingerprint in (HONDA_BOSCH - HONDA_BOSCH_RADARLESS) and CP.openpilotLongitudinalControl:
       if communication_control is None and CP.carFingerprint in HONDA_BOSCH_CANFD:
         # CAN FD: only clear DTCs here; the radar silencing itself is deferred to CarController until

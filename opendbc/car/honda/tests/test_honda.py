@@ -1,7 +1,8 @@
 import unittest
+from unittest import mock
 
 from opendbc.can import CANPacker
-from opendbc.car.honda import hondacan, hud_objects, lane_path
+from opendbc.car.honda import hondacan, hud_objects, interface, lane_path
 from opendbc.car.honda.carstate import TickReference
 from opendbc.car.honda.interface import CarInterface
 from opendbc.car.honda.values import CAR, HondaFlags, HondaSafetyFlags
@@ -89,3 +90,46 @@ class TestTickReference(unittest.TestCase):
   def test_backlog_is_capped(self):
     # a late batch carrying many references catches up by at most MAX_PENDING pulses
     assert self.pulses([5, 0, 0, 0], 1) == [1, 2]
+
+
+class TestHondaCanfdStartupDiagnostics(unittest.TestCase):
+  """CarInterface.init() reads the CAN FD radar's cancel history and DTCs at every startup, before any clear."""
+
+  @staticmethod
+  def run_init(car_model, alpha_long, communication_control=None):
+    """Run init() with the ECU helpers patched out; return the calls in order."""
+    calls = []
+    CP = CarInterface.get_params(car_model, gen_empty_fingerprint(), [], alpha_long, False, False)
+
+    def read(can_recv, can_send, bus, addr, request, response, timeout=0.2):
+      calls.append(('read', hex(addr), request.hex()))
+
+    targets = {
+      'carlog': mock.Mock(),
+      'read_ecu_data': read,
+      'clear_all_dtcs': lambda can_send, buses: calls.append(('clear_all', tuple(buses))),
+      'clear_ecu_dtcs': lambda can_recv, can_send, bus=0, addr=0x7d0, **kw: calls.append(('clear_ecu', hex(addr))),
+      'disable_ecu': lambda can_recv, can_send, bus=0, addr=0x7d0, **kw: calls.append(('disable', hex(addr))),
+    }
+    with mock.patch.multiple(interface, **targets):
+      CarInterface.init(CP, None, None, None, communication_control)
+    return calls
+
+  def test_stock_longitudinal_only_reads(self):
+    calls = self.run_init(CAR.HONDA_CRV_6G, alpha_long=False)
+    assert calls == [('read', '0x18dab0f1', '22aa02'), ('read', '0x18dab0f1', '1902ff'), ('read', '0x18dab5f1', '1902ff')]
+
+  def test_alpha_long_reads_before_clearing(self):
+    calls = self.run_init(CAR.HONDA_CRV_6G, alpha_long=True)
+    kinds = [c[0] for c in calls]
+    assert kinds == ['read', 'read', 'read', 'clear_all', 'clear_ecu'], calls
+
+  def test_re_enable_does_not_read(self):
+    # a call with communication_control set re-enables the radar; it is not a startup
+    enable = b'\x28\x80\x03'
+    for alpha_long in (False, True):
+      assert not any(c[0] == 'read' for c in self.run_init(CAR.HONDA_CRV_6G, alpha_long, enable))
+
+  def test_other_platforms_untouched(self):
+    for alpha_long in (False, True):
+      assert not any(c[0] == 'read' for c in self.run_init(CAR.HONDA_CIVIC_BOSCH, alpha_long=alpha_long))

@@ -32,6 +32,23 @@ def clear_all_dtcs(can_send, buses, functional_addr=FUNCTIONAL_ADDR_29BIT):
     can_send([CanData(functional_addr, CLEAR_DTC_ISOTP_SF, bus)])
 
 
+def read_ecu_data(can_recv, can_send, bus, addr, request, response, timeout=0.2):
+  """Send one read-only UDS request in the current session and return the data after `response`,
+  or None. Negative responses are logged by the query."""
+  try:
+    query = IsoTpParallelQuery(can_send, can_recv, bus, [(addr, None)], [request], [response], response_pending_timeout=1.)
+    return query.get_data(timeout, total_timeout=2.).get((addr, None))
+  except Exception:
+    carlog.exception(f"ecu read {hex(addr)} {request.hex()} exception")
+    return None
+
+
+def format_dtc(dtc: bytes) -> str:
+  """Format a three-byte UDS DTC the way Honda prints it, e.g. 0xC13100 -> U0131-00."""
+  code = int.from_bytes(dtc[:2], 'big')
+  return f"{'PCBU'[code >> 14]}{(code >> 12) & 0x3}{code & 0xfff:03X}-{dtc[2]:02X}"
+
+
 def clear_ecu_dtcs(can_recv, can_send, bus=0, addr=0x7d0, sub_addr=None, timeout=0.1, retry=10):
   """Enter the extended diagnostic session and clear an ECU's stored DTCs (UDS 0x14), without
   disabling its communication."""
